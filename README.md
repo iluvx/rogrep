@@ -9,7 +9,7 @@ Find a Roblox user in a public game server.
 1. Install [Violentmonkey](https://violentmonkey.github.io/)
 2. Click below to install the script
 
-**[→ Install rogrep](./dist/rogrep.user.js)**
+**[→ Install rogrep](https://github.com/iluvx/rogrep/raw/refs/heads/main/dist/rogrep.user.js)**
 
 ## Usage
 
