@@ -1,0 +1,135 @@
+/* Preflights are needed for default values of variables */
+@unocss preflights;
+
+.root {
+  width: 320px;
+  padding: 14px;
+  font-family:
+    system-ui,
+    -apple-system,
+    sans-serif;
+  color: #f3f4f6;
+  background: #1f2430;
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+}
+
+.header {
+  font-size: 13px;
+  font-weight: 600;
+  margin-bottom: 12px;
+  color: #cdd3e0;
+  cursor: move;
+  user-select: none;
+}
+
+.form {
+  display: flex;
+  gap: 8px;
+}
+
+.input {
+  flex: 1;
+  min-width: 0;
+  padding: 8px 10px;
+  border-radius: 8px;
+  border: 1px solid #3a4152;
+  background: #131722;
+  color: #f3f4f6;
+  font-size: 13px;
+  outline: none;
+}
+
+.input:focus {
+  border-color: #335fff;
+}
+
+.button {
+  padding: 8px 14px;
+  border-radius: 8px;
+  border: none;
+  background: #335fff;
+  color: #fff;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.button:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+
+.result {
+  margin-top: 12px;
+  min-height: 8px;
+}
+
+.loading {
+  font-size: 13px;
+  color: #9aa4bd;
+}
+
+.error {
+  font-size: 13px;
+  color: #ff6b6b;
+}
+
+.card {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+}
+
+.avatar {
+  width: 56px;
+  height: 56px;
+  border-radius: 8px;
+  background: #131722;
+  flex-shrink: 0;
+}
+
+.info {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
+}
+
+.name {
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.found {
+  font-size: 13px;
+  color: #4ade80;
+  font-weight: 600;
+}
+
+.notFound {
+  font-size: 13px;
+  color: #ff6b6b;
+}
+
+.meta {
+  font-size: 12px;
+  color: #9aa4bd;
+}
+
+.serverId {
+  font-size: 11px;
+  color: #6b7280;
+  word-break: break-all;
+}
+
+.join {
+  margin-top: 4px;
+  font-size: 12px;
+  color: #7aa2ff;
+  text-decoration: none;
+}
+
+.join:hover {
+  text-decoration: underline;
+}
