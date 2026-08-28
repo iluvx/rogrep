@@ -16,4 +16,18 @@ Find a Roblox user in a public game server.
 Open any Roblox game page, click the **rogrep** button, enter a username, and search.
 
 ## For developers
-Start the project with `npm run dev` then run `pnpm dlx http-server -c5` and load the dist file in to violentmonkey.
+
+Needs [Bun](https://bun.com).
+
+```bash
+bun install
+bun run dev
+```
+
+Then serve `dist/` (for example `bunx serve dist`) and load `dist/rogrep.user.js` in Violentmonkey.
+
+```bash
+bun run build
+```
+
+writes the production userscript to `dist/rogrep.user.js`.
