@@ -29,8 +29,8 @@ export interface ServerMatch {
 }
 
 const COMMON_HEADERS = {
-  accept: '*/*',
-  'accept-language': 'en-GB,en;q=0.9',
+  accept: "*/*",
+  "accept-language": "en-GB,en;q=0.9",
 };
 
 /** How long to wait before retrying after a 429 (Too Many Requests). */
@@ -62,7 +62,7 @@ async function fetchWithRetry(
     const res = await fetch(input, init);
     if (res.status !== 429 || attempt >= MAX_RETRIES) return res;
     attempt += 1;
-    const retryAfter = Number(res.headers.get('retry-after'));
+    const retryAfter = Number(res.headers.get("retry-after"));
     const waitMs =
       Number.isFinite(retryAfter) && retryAfter > 0
         ? Math.max(retryAfter * 1000, RETRY_DELAY_MS)
@@ -79,7 +79,7 @@ async function fetchWithRetry(
  */
 function headshotHash(imageUrl: string): string {
   const match = imageUrl.match(/AvatarHeadshot-([A-Fa-f0-9]+)/);
-  return match ? match[1].toUpperCase() : imageUrl;
+  return match?.[1] ? match[1].toUpperCase() : imageUrl;
 }
 
 /** Resolve a username to its Roblox user record. Returns null if not found. */
@@ -88,17 +88,17 @@ export async function resolveUsername(
   onRateLimit?: OnRateLimit,
 ): Promise<RobloxUser | null> {
   const res = await fetchWithRetry(
-    'https://users.roblox.com/v1/usernames/users',
+    "https://users.roblox.com/v1/usernames/users",
     {
-      headers: { ...COMMON_HEADERS, 'content-type': 'application/json' },
-      referrer: 'https://www.roblox.com/',
+      headers: { ...COMMON_HEADERS, "content-type": "application/json" },
+      referrer: "https://www.roblox.com/",
       body: JSON.stringify({
         usernames: [username],
         excludeBannedUsers: true,
       }),
-      method: 'POST',
-      mode: 'cors',
-      credentials: 'omit',
+      method: "POST",
+      mode: "cors",
+      credentials: "omit",
     },
     onRateLimit,
   );
@@ -119,10 +119,10 @@ export async function getUserHeadshot(
     `https://thumbnails.roblox.com/v1/users/avatar-headshot?userIds=${userId}&size=150x150&format=Png&isCircular=false`,
     {
       headers: COMMON_HEADERS,
-      referrer: 'https://www.roblox.com/',
-      method: 'GET',
-      mode: 'cors',
-      credentials: 'include',
+      referrer: "https://www.roblox.com/",
+      method: "GET",
+      mode: "cors",
+      credentials: "include",
     },
     onRateLimit,
   );
@@ -140,16 +140,16 @@ export async function getPublicServers(
   onRateLimit?: OnRateLimit,
 ): Promise<GameServer[]> {
   const servers: GameServer[] = [];
-  let cursor = '';
+  let cursor = "";
   do {
     const res = await fetchWithRetry(
       `https://games.roblox.com/v1/games/${placeId}/servers/Public?limit=100&cursor=${cursor}`,
       {
         headers: COMMON_HEADERS,
-        referrer: 'https://www.roblox.com/',
-        method: 'GET',
-        mode: 'cors',
-        credentials: 'include',
+        referrer: "https://www.roblox.com/",
+        method: "GET",
+        mode: "cors",
+        credentials: "include",
       },
       onRateLimit,
     );
@@ -160,15 +160,15 @@ export async function getPublicServers(
     };
     servers.push(...(json.data ?? []));
     onProgress?.(servers.length);
-    cursor = json.nextPageCursor ?? '';
+    cursor = json.nextPageCursor ?? "";
   } while (cursor);
   return servers;
 }
 
 interface BatchItem {
   token: string;
-  type: 'AvatarHeadshot';
-  size: '150x150';
+  type: "AvatarHeadshot";
+  size: "150x150";
   requestId: string;
 }
 
@@ -183,14 +183,14 @@ async function fetchHeadshotBatch(
   onRateLimit?: OnRateLimit,
 ): Promise<BatchResult[]> {
   const res = await fetchWithRetry(
-    'https://thumbnails.roblox.com/v1/batch',
+    "https://thumbnails.roblox.com/v1/batch",
     {
-      headers: { ...COMMON_HEADERS, 'content-type': 'application/json' },
-      referrer: 'https://www.roblox.com/',
+      headers: { ...COMMON_HEADERS, "content-type": "application/json" },
+      referrer: "https://www.roblox.com/",
       body: JSON.stringify(items),
-      method: 'POST',
-      mode: 'cors',
-      credentials: 'omit',
+      method: "POST",
+      mode: "cors",
+      credentials: "omit",
     },
     onRateLimit,
   );
@@ -219,7 +219,7 @@ export async function findUserInServers(
     server.playerTokens.forEach((token, ti) => {
       const requestId = `${si}:${ti}`;
       tokenToServer.set(requestId, server);
-      items.push({ token, type: 'AvatarHeadshot', size: '150x150', requestId });
+      items.push({ token, type: "AvatarHeadshot", size: "150x150", requestId });
     });
   });
 
@@ -245,5 +245,5 @@ export async function findUserInServers(
 /** Extract the numeric place id from a /games/<id>/... url. */
 export function getPlaceIdFromUrl(url: string): string | null {
   const match = url.match(/\/games\/(\d+)/);
-  return match ? match[1] : null;
+  return match?.[1] ?? null;
 }

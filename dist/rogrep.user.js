@@ -1,1169 +1,191 @@
 // ==UserScript==
 // @name        rogrep
-// @namespace   Violentmonkey Scripts
+// @namespace   https://github.com/iluvx/rogrep
 // @description Find roblox users in public servers
 // @match       *://*.roblox.com/games/*
 // @match       *://roblox.com/games/*
-// @version     0.0.0
+// @grant       GM_addStyle
+// @version     0.0.1
 // @author      iluvx
 // @require     https://cdn.jsdelivr.net/npm/@violentmonkey/dom@2
 // @require     https://cdn.jsdelivr.net/npm/@violentmonkey/ui@0.7
-// @grant       GM_addStyle
+// @downloadURL https://github.com/iluvx/rogrep/raw/refs/heads/main/dist/rogrep.user.js
 // ==/UserScript==
 
-(function (ui) {
-'use strict';
-
-const IS_DEV = false;
-const equalFn = (a, b) => a === b;
-const signalOptions = {
-  equals: equalFn
-};
-let runEffects = runQueue;
-const STALE = 1;
-const PENDING = 2;
-const UNOWNED = {
-  owned: null,
-  cleanups: null,
-  context: null,
-  owner: null
-};
-var Owner = null;
-let Transition = null;
-let ExternalSourceConfig = null;
-let Listener = null;
-let Updates = null;
-let Effects = null;
-let ExecCount = 0;
-function createRoot(fn, detachedOwner) {
-  const listener = Listener,
-    owner = Owner,
-    unowned = fn.length === 0,
-    current = detachedOwner === undefined ? owner : detachedOwner,
-    root = unowned ? UNOWNED : {
-      owned: null,
-      cleanups: null,
-      context: current ? current.context : null,
-      owner: current
-    },
-    updateFn = unowned ? fn : () => fn(() => untrack(() => cleanNode(root)));
-  Owner = root;
-  Listener = null;
-  try {
-    return runUpdates(updateFn, true);
-  } finally {
-    Listener = listener;
-    Owner = owner;
+// hi
+(()=>{var co=globalThis.process?.env?.NODE_ENV,f=co&&!co.toLowerCase().startsWith("prod");var dt=Array.isArray,uo=Array.prototype.indexOf,pt=Array.prototype.includes,on=Array.from,sn=Object.keys,ne=Object.defineProperty,$e=Object.getOwnPropertyDescriptor,an=Object.getOwnPropertyDescriptors,fn=Object.prototype,po=Array.prototype,Yt=Object.getPrototypeOf,ln=Object.isExtensible;var je=()=>{};function yr(e){for(var t=0;t<e.length;t++)e[t]()}function Er(){var e,t,r=new Promise((n,o)=>{e=n,t=o});return{promise:r,resolve:e,reject:t}}var R=2,Ge=4,_t=8,Tt=16777216,W=16,V=32,le=64,Ht=128,K=512,k=1024,A=2048,L=4096,X=8192,F=16384,ce=32768,Ut=33554432,he=65536,mt=131072,cn=262144,ze=524288,_o=1048576;var Te=65536,At=2097152,Ae=4194304,Ne=8388608,oe=Symbol("$state"),$r=Symbol("legacy props"),mo=Symbol(""),Tr=Symbol("proxy path"),Ar=Symbol("attributes"),un=Symbol("class"),dn=Symbol("style"),rr=Symbol("text"),vt=Symbol("form reset"),pn=Symbol("hmr anchor"),tt=new class extends Error{name="StaleReactionError";message="The reaction that called `getAbortSignal()` was re-run or destroyed"},_n=!!globalThis.document?.contentType&&globalThis.document.contentType.includes("xml");var nr=3,Fe=8;function vo(e){if(f){let t=Error(`invariant_violation
+An invariant violation occurred, meaning Svelte's internal assumptions were flawed. This is a bug in Svelte, not your app — please open an issue at https://github.com/sveltejs/svelte, citing the following message: "${e}"
+https://svelte.dev/e/invariant_violation`);throw t.name="Svelte error",t}else throw Error("https://svelte.dev/e/invariant_violation")}function go(){if(f){let e=Error("async_derived_orphan\nCannot create a `$derived(...)` with an `await` expression outside of an effect tree\nhttps://svelte.dev/e/async_derived_orphan");throw e.name="Svelte error",e}else throw Error("https://svelte.dev/e/async_derived_orphan")}function mn(){if(f){let e=Error("bind_invalid_checkbox_value\nUsing `bind:value` together with a checkbox input is not allowed. Use `bind:checked` instead\nhttps://svelte.dev/e/bind_invalid_checkbox_value");throw e.name="Svelte error",e}else throw Error("https://svelte.dev/e/bind_invalid_checkbox_value")}function xo(){if(f){let e=Error(`derived_references_self
+A derived value cannot reference itself recursively
+https://svelte.dev/e/derived_references_self`);throw e.name="Svelte error",e}else throw Error("https://svelte.dev/e/derived_references_self")}function bo(e){if(f){let t=Error(`effect_in_teardown
+\`${e}\` cannot be used inside an effect cleanup function
+https://svelte.dev/e/effect_in_teardown`);throw t.name="Svelte error",t}else throw Error("https://svelte.dev/e/effect_in_teardown")}function wo(){if(f){let e=Error("effect_in_unowned_derived\nEffect cannot be created inside a `$derived` value that was not itself created inside an effect\nhttps://svelte.dev/e/effect_in_unowned_derived");throw e.name="Svelte error",e}else throw Error("https://svelte.dev/e/effect_in_unowned_derived")}function yo(e){if(f){let t=Error(`effect_orphan
+\`${e}\` can only be used inside an effect (e.g. during component initialisation)
+https://svelte.dev/e/effect_orphan`);throw t.name="Svelte error",t}else throw Error("https://svelte.dev/e/effect_orphan")}function Eo(){if(f){let e=Error(`effect_update_depth_exceeded
+Maximum update depth exceeded. This typically indicates that an effect reads and writes the same piece of state
+https://svelte.dev/e/effect_update_depth_exceeded`);throw e.name="Svelte error",e}else throw Error("https://svelte.dev/e/effect_update_depth_exceeded")}function $o(){if(f){let e=Error(`hydration_failed
+Failed to hydrate the application
+https://svelte.dev/e/hydration_failed`);throw e.name="Svelte error",e}else throw Error("https://svelte.dev/e/hydration_failed")}function To(e){if(f){let t=Error(`rune_outside_svelte
+The \`${e}\` rune is only available inside \`.svelte\` and \`.svelte.js/ts\` files
+https://svelte.dev/e/rune_outside_svelte`);throw t.name="Svelte error",t}else throw Error("https://svelte.dev/e/rune_outside_svelte")}function Ao(){if(f){let e=Error("state_descriptors_fixed\nProperty descriptors defined on `$state` objects must contain `value` and always be `enumerable`, `configurable` and `writable`.\nhttps://svelte.dev/e/state_descriptors_fixed");throw e.name="Svelte error",e}else throw Error("https://svelte.dev/e/state_descriptors_fixed")}function So(){if(f){let e=Error("state_prototype_fixed\nCannot set prototype of `$state` object\nhttps://svelte.dev/e/state_prototype_fixed");throw e.name="Svelte error",e}else throw Error("https://svelte.dev/e/state_prototype_fixed")}function ko(){if(f){let e=Error("state_unsafe_mutation\nUpdating state inside `$derived(...)`, `$inspect(...)` or a template expression is forbidden. If the value should not be reactive, declare it without `$state`\nhttps://svelte.dev/e/state_unsafe_mutation");throw e.name="Svelte error",e}else throw Error("https://svelte.dev/e/state_unsafe_mutation")}function No(){if(f){let e=Error("svelte_boundary_reset_onerror\nA `<svelte:boundary>` `reset` function cannot be called while an error is still being handled\nhttps://svelte.dev/e/svelte_boundary_reset_onerror");throw e.name="Svelte error",e}else throw Error("https://svelte.dev/e/svelte_boundary_reset_onerror")}var Ro=1,Co=2;var Vt="[",St="[!",vn="[?",jt="]",rt={};var C=Symbol("uninitialized"),Re=Symbol("filename"),Oo=Symbol("hmr"),Sr="http://www.w3.org/1999/xhtml";var nt="font-weight: bold",ot="font-weight: normal";function Io(e){if(f)console.warn(`%c[svelte] await_reactivity_loss
+%cDetected reactivity loss when reading \`${e}\`. This happens when state is read in an async function after an earlier \`await\`
+https://svelte.dev/e/await_reactivity_loss`,nt,ot);else console.warn("https://svelte.dev/e/await_reactivity_loss")}function Do(e,t){if(f)console.warn(`%c[svelte] await_waterfall
+%cAn async derived, \`${e}\` (${t}) was not read immediately after it resolved. This often indicates an unnecessary waterfall, which can slow down your app
+https://svelte.dev/e/await_waterfall`,nt,ot);else console.warn("https://svelte.dev/e/await_waterfall")}function Mo(){if(f)console.warn(`%c[svelte] derived_inert
+%cReading a derived belonging to a now-destroyed effect may result in stale values
+https://svelte.dev/e/derived_inert`,nt,ot);else console.warn("https://svelte.dev/e/derived_inert")}function Lo(e,t,r){if(f)console.warn(`%c[svelte] hydration_attribute_changed
+%cThe \`${e}\` attribute on \`${t}\` changed its value between server and client renders. The client value, \`${r}\`, will be ignored in favour of the server value
+https://svelte.dev/e/hydration_attribute_changed`,nt,ot);else console.warn("https://svelte.dev/e/hydration_attribute_changed")}function kt(e){if(f)console.warn(`%c[svelte] hydration_mismatch
+%c${e?`Hydration failed because the initial UI does not match what was rendered on the server. The error occurred near ${e}`:"Hydration failed because the initial UI does not match what was rendered on the server"}
+https://svelte.dev/e/hydration_mismatch`,nt,ot);else console.warn("https://svelte.dev/e/hydration_mismatch")}function Fo(){if(f)console.warn(`%c[svelte] lifecycle_double_unmount
+%cTried to unmount a component that was not mounted
+https://svelte.dev/e/lifecycle_double_unmount`,nt,ot);else console.warn("https://svelte.dev/e/lifecycle_double_unmount")}function kr(e){if(f)console.warn(`%c[svelte] state_proxy_equality_mismatch
+%cReactive \`$state(...)\` proxies and the values they proxy have different identities. Because of this, comparisons with \`${e}\` will produce unexpected results
+https://svelte.dev/e/state_proxy_equality_mismatch`,nt,ot);else console.warn("https://svelte.dev/e/state_proxy_equality_mismatch")}function Po(){if(f)console.warn(`%c[svelte] state_proxy_unmount
+%cTried to unmount a state proxy, rather than a component
+https://svelte.dev/e/state_proxy_unmount`,nt,ot);else console.warn("https://svelte.dev/e/state_proxy_unmount")}function qo(){if(f)console.warn("%c[svelte] svelte_boundary_reset_noop\n%cA `<svelte:boundary>` `reset` function only resets the boundary the first time it is called\nhttps://svelte.dev/e/svelte_boundary_reset_noop",nt,ot);else console.warn("https://svelte.dev/e/svelte_boundary_reset_noop")}var w=!1;function ie(e){w=e}var y;function D(e){if(e===null)throw kt(),rt;return y=e}function ue(){return D(se(y))}function Q(e){if(!w)return;if(se(y)!==null)throw kt(),rt;y=e}function or(e=1){if(w){var t=e,r=y;while(t--)r=se(r);y=r}}function ht(e=!0){var t=0,r=y;while(!0){if(r.nodeType===Fe){var n=r.data;if(n===jt){if(t===0)return r;t-=1}else if(n===Vt||n===St||n[0]==="["&&!isNaN(Number(n.slice(1))))t+=1}var o=se(r);if(e)r.remove();r=o}}function Nr(e){if(!e||e.nodeType!==Fe)throw kt(),rt;return e.data}function Rr(e){return e===this.v}function hn(e,t){return e!=e?t==t:e!==t||e!==null&&typeof e==="object"||typeof e==="function"}function Cr(e){return!hn(e,this.v)}var B=!1,Nt=!1,Pe=!1;var ir=null;function de(e,t){return e.label=t,Ir(e.v,t),e}function Ir(e,t){return e?.[Tr]?.(t),e}function qe(e){let t=Error(),r=Ki();if(r.length===0)return null;return r.unshift(`
+`),ne(t,"stack",{value:r.join(`
+`)}),ne(t,"name",{value:e}),t}function Ki(){let e=Error.stackTraceLimit;Error.stackTraceLimit=1/0;let t=Error().stack;if(Error.stackTraceLimit=e,!t)return[];let r=t.split(`
+`),n=[];for(let o=0;o<r.length;o++){let i=r[o],s=i.replaceAll("\\","/");if(i.trim()==="Error")continue;if(i.includes("validate_each_keys"))return[];if(s.includes("svelte/src/internal")||s.includes("node_modules/.vite"))continue;n.push(i)}return n}function Yo(e,t){if(!f)throw Error("invariant(...) was not guarded by if (DEV)");if(!e)vo(t)}var T=null;function it(e){T=e}var We=null;function Gt(e){We=e}var Be=null;function Dr(e){Be=e}function sr(e,t=!1,r){if(T={p:T,i:!1,c:null,e:null,s:e,x:null,r:m,l:Nt&&!t?{s:null,u:null,$:[]}:null},f)T.function=r,Be=r}function ar(e){var t=T,r=t.e;if(r!==null){t.e=null;for(var n of r)gn(n)}if(e!==void 0)t.x=e;if(t.i=!0,T=t.p,f)Be=T?.function??null;return e??{}}function Ke(){return!Nt||T!==null&&T.l===null}var Rt=[];function Uo(){var e=Rt;Rt=[],yr(e)}function Y(e){if(Rt.length===0&&!Ct){var t=Rt;queueMicrotask(()=>{if(t===Rt)Uo()})}Rt.push(e)}function Vo(){while(Rt.length>0)Uo()}var xn=new WeakMap;function Mr(e){var t=m;if(t===null)return x.f|=Ne,e;if(f&&e instanceof Error&&!xn.has(e))xn.set(e,Xi(e,t));if((t.f&ce)===0&&(t.f&Ge)===0){if(f&&!t.parent&&e instanceof Error)jo(e);throw e}Ye(e,t)}function Ye(e,t){if(t!==null&&(t.f&F)!==0)return;while(t!==null){if((t.f&Ht)!==0){if((t.f&ce)===0)throw e;try{t.b.error(e);return}catch(r){e=r}}t=t.parent}if(f&&e instanceof Error)jo(e);throw e}function Xi(e,t){let r=$e(e,"message");if(r&&!r.configurable)return;var n=fr?"  ":"\t",o=`
+${n}in ${t.fn?.name||"<unknown>"}`,i=t.ctx;while(i!==null)o+=`
+${n}in ${i.function?.[Re].split("/").pop()}`,i=i.p;return{message:e.message+`
+${o}
+`,stack:e.stack?.split(`
+`).filter((s)=>!s.includes("svelte/src/internal")).join(`
+`)}}function jo(e){let t=xn.get(e);if(t)ne(e,"message",{value:t.message}),ne(e,"stack",{value:t.stack})}var Zi=~(A|L|k);function S(e,t){e.f=e.f&Zi|t}function zt(e){if((e.f&K)!==0||e.deps===null)S(e,k);else S(e,L)}function Go(e){if(e===null)return;for(let t of e){if((t.f&R)===0||(t.f&Te)===0)continue;t.f^=Te,Go(t.deps)}}function Lr(e,t,r){if((e.f&A)!==0)t.add(e);else if((e.f&L)!==0)r.add(e);Go(e.deps),S(e,k)}var zo=!1;var If=Symbol("unmounted");var Wo=!1;function Fr(){if(!Wo)Wo=!0,document.addEventListener("reset",(e)=>{Promise.resolve().then(()=>{if(!e.defaultPrevented)for(let t of e.target.elements)t[vt]?.()})},{capture:!0})}function Ce(e){var t=x,r=m;H(null),U(null);try{return e()}finally{H(t),U(r)}}function bn(e,t,r,n=r){e.addEventListener(t,()=>Ce(r));let o=e[vt];if(o)e[vt]=()=>{o(),n(!0)};else e[vt]=()=>n(!0);Fr()}function Ko(e){let t=0,r=xe(0),n;if(f)de(r,"createSubscriber version");return()=>{if(gt())h(r),j(()=>{if(t===0)n=M(()=>e(()=>Ot(r)));return t+=1,()=>{Y(()=>{if(t-=1,t===0)n?.(),n=void 0,Ot(r)})}})}}var Qi=he|ze;function wn(e,t,r,n){new yn(e,t,r,n)}class yn{parent;is_pending=!1;transform_error;#e;#t=w?y:null;#r;#f;#i;#s=null;#n=null;#a=null;#o=null;#m=0;#c=0;#u=!1;#d=new Set;#v=new Set;#l=null;#x=Ko(()=>{if(this.#l=xe(this.#m),f)de(this.#l,"$effect.pending()");return()=>{this.#l=null}});constructor(e,t,r,n){if(this.#e=e,this.#r=t,this.#f=(o)=>{var i=m;i.b=this,i.f|=Ht,r(o)},this.parent=m.b,this.transform_error=n??this.parent?.transform_error??((o)=>o),this.#i=Oe(()=>{if(w){let o=this.#t;ue();let i=o.data===St;if(o.data.startsWith(vn)){let a=JSON.parse(o.data.slice(vn.length));this.#b(a)}else if(i)this.#y();else this.#h()}else this.#p()},Qi),w)this.#e=y}#h(){try{this.#s=ae(()=>this.#f(this.#e))}catch(e){this.error(e)}}#b(e){let t=this.#r.failed,{reset:r,invoke_onerror:n}=this.#w(e);if(Y(n),!t)return;this.#a=ae(()=>{t(this.#e,()=>e,()=>r)})}#w(e){var t=!1,r=!1;let n=()=>{if(t){qo();return}if(t=!0,r)No();if(this.#a!==null)xt(this.#a,()=>{this.#a=null});this.#_(()=>{this.#p()})};return{reset:n,invoke_onerror:()=>{try{r=!0,this.#r.onerror?.(e,n),r=!1}catch(i){Ye(i,this.#i&&this.#i.parent)}}}}#y(){let e=this.#r.pending;if(!e)return;this.is_pending=!0,this.#n=ae(()=>e(this.#e)),Y(()=>{var t=this.#o=document.createDocumentFragment(),r=be();if(t.append(r),this.#s=this.#_(()=>ae(()=>this.#f(r))),this.#c===0)this.#e.before(t),this.#o=null,xt(this.#n,()=>{this.#n=null}),this.#g(g)})}#p(){try{if(this.is_pending=this.has_pending_snippet(),this.#c=0,this.#m=0,this.#s=ae(()=>{this.#f(this.#e)}),this.#c>0){var e=this.#o=document.createDocumentFragment();cr(this.#s,e);let t=this.#r.pending;this.#n=ae(()=>t(this.#e))}else this.#g(g)}catch(t){this.error(t)}}#g(e){this.is_pending=!1,e.transfer_effects(this.#d,this.#v)}defer_effect(e){Lr(e,this.#d,this.#v)}is_rendered(){return!this.is_pending&&(!this.parent||this.parent.is_rendered())}has_pending_snippet(){return!!this.#r.pending}#_(e){var t=m,r=x,n=T;U(this.#i),H(this.#i),it(this.#i.ctx);try{return te.ensure(),e()}catch(o){return Mr(o),null}finally{U(t),H(r),it(n)}}#E(e,t){if(!this.has_pending_snippet()){if(this.parent)this.parent.#E(e,t);return}if(this.#c+=e,this.#c===0){if(this.#g(t),this.#n)xt(this.#n,()=>{this.#n=null});if(this.#o)this.#e.before(this.#o),this.#o=null}}update_pending_count(e,t){if(this.#E(e,t),this.#m+=e,!this.#l||this.#u)return;this.#u=!0,Y(()=>{if(this.#u=!1,this.#l)st(this.#l,this.#m)})}get_effect_pending(){return this.#x(),h(this.#l)}error(e){if(!this.#r.onerror&&!this.#r.failed)throw e;if(g?.is_fork){if(this.#s)g.skip_effect(this.#s);if(this.#n)g.skip_effect(this.#n);if(this.#a)g.skip_effect(this.#a);g.oncommit(()=>{this.#$(e)})}else this.#$(e)}#$(e){if(this.#s)P(this.#s),this.#s=null;if(this.#n)P(this.#n),this.#n=null;if(this.#a)P(this.#a),this.#a=null;if(w)D(this.#t),or(),D(ht());let t=this.#r.failed,r=(n)=>{let{reset:o,invoke_onerror:i}=this.#w(n);if(i(),t)this.#a=this.#_(()=>{try{return ae(()=>{var s=m;s.b=this,s.f|=Ht,t(this.#e,()=>n,()=>o)})}catch(s){return Ye(s,this.#i.parent),null}})};Y(()=>{var n;try{n=this.transform_error(e)}catch(o){Ye(o,this.#i&&this.#i.parent);return}if(n!==null&&typeof n==="object"&&typeof n.then==="function")n.then(r,(o)=>Ye(o,this.#i&&this.#i.parent));else r(n)})}}function qr(e,t,r,n){let o=Ke()?Xt:ur;var i=e.filter((l)=>!l.settled),s=t.map(o);if(f)s.forEach((l,_)=>{l.label=t[_].toString().replace("() => ","").replaceAll("$.eager(() => ","$state.eager(").replace(/\$\.get\((.+?)\)/g,(b,I)=>I)});if(r.length===0&&i.length===0){n(s);return}var a=m,u=Xo(),v=i.length===1?i[0].promise:i.length>1?Promise.all(i.map((l)=>l.promise)):null;function p(l){if((a.f&F)!==0)return;u();try{n([...s,...l])}catch(_){Ye(_,a)}Kt()}var d=En();if(r.length===0){v.then(()=>p([])).finally(d);return}function c(){Promise.all(r.map((l)=>Tn(l))).then(p).catch((l)=>Ye(l,a)).finally(d)}if(v)v.then(()=>{u(),c(),Kt()});else c()}function Xo(){var e=m,t=x,r=T,n=g;if(f)var o=We;return function(s=!0){if(U(e),H(t),it(r),s&&(e.f&F)===0)n?.activate(),n?.apply();if(f)$n(null),Gt(o)}}function Kt(e=!0){if(U(null),H(null),it(null),e)g?.deactivate();if(f)$n(null),Gt(null)}function En(){var e=m,t=e.b,r=g,n=!!t?.is_rendered();return t?.update_pending_count(1,r),r.increment(n,e),()=>{t?.update_pending_count(-1,r),r.decrement(n,e)}}var we=null;function $n(e){we=e}var dr=new Set;function Xt(e){var t=R|A;if(m!==null)m.f|=ze;let r={ctx:T,deps:null,effects:null,equals:Rr,f:t,fn:e,reactions:null,rv:0,v:C,wv:0,parent:m,ac:null};if(f&&Pe)r.created=qe("created at");return r}var Zt=Symbol("obsolete");function Tn(e,t,r){let n=m;if(n===null)go();var o=void 0,i=xe(C);if(f)i.label=t??e.toString();var s=!x,a=new Set;if(Qo(()=>{var u=m;if(f)we={effect:u,effect_deps:new Set,warned:!1};var v=Er();o=v.promise;try{Promise.resolve(e()).then(v.resolve,(l)=>{if(l!==tt)v.reject(l)}).finally(Kt)}catch(l){v.reject(l),Kt()}if(f){if(we){if(u.deps!==null)for(let l=0;l<pe;l+=1)we.effect_deps.add(u.deps[l]);if(G!==null)for(let l=0;l<G.length;l+=1)we.effect_deps.add(G[l])}we=null}var p=g;if(s){if((u.f&ce)!==0)var d=En();if(n.b?.is_rendered())p.async_deriveds.get(u)?.reject(Zt);else for(let l of a.values())l.reject(Zt);a.add(v),p.async_deriveds.set(u,v)}let c=(l,_=void 0)=>{if(f)we=null;if(d?.(),a.delete(v),_===Zt)return;if(p.activate(),_)i.f|=Ne,st(i,_);else{if((i.f&Ne)!==0)i.f^=Ne;if(f&&r!==void 0&&!i.equals(l))dr.add(i),setTimeout(()=>{if(dr.has(i)&&(u.f&F)===0)Do(i.label,r),dr.delete(i)});st(i,l)}p.deactivate()};v.promise.then(c,(l)=>c(null,l||"unknown"))}),ee(()=>{for(let u of a)u.reject(Zt)}),f)i.f|=Ae;return new Promise((u)=>{function v(p){function d(){if(p===o)u(i);else v(o)}p.then(d,d)}v(o)})}function Sn(e){let t=Xt(e);if(!B)Hr(t);return t}function ur(e){let t=Xt(e);return t.equals=Cr,t}function Zo(e){var t=e.effects;if(t!==null){e.effects=null;for(var r=0;r<t.length;r+=1)P(t[r])}}var An=[];function pr(e){var t,r=m,n=e.parent;if(!Ie&&n!==null&&e.v!==C&&(n.f&(F|X))!==0)return Mo(),e.v;if(U(n),f){let o=It;Br(new Set);try{if(pt.call(An,e))xo();An.push(e),e.f&=~Te,Zo(e),t=Yr(e)}finally{U(r),Br(o),An.pop()}}else try{e.f&=~Te,Zo(e),t=Yr(e)}finally{U(r)}return t}function kn(e){var t=pr(e);if(!e.equals(t)){if(e.wv=Jt(),!g?.is_fork||e.deps===null){if(g!==null)g.capture(e,t,!0),at?.capture(e,t,!0);else e.v=t;if(e.deps===null){S(e,k);return}}}if(Ie)return;if(z!==null){if(gt()||g?.is_fork)z.set(e,t)}else zt(e)}function Jo(e){if(e.effects===null)return;for(let t of e.effects)if(t.teardown||t.ac){if(t.teardown?.(),t.ac!==null)Ce(()=>{t.ac.abort(tt),t.ac=null});if(t.fn!==null)t.teardown=je;Dt(t,0),_r(t)}}function Nn(e){if(e.effects===null)return;for(let t of e.effects)if(t.teardown&&t.fn!==null)Xe(t)}var Ur=null,Qt=null,g=null,at=null,z=null,On=null,Ct=!1,Rn=!1,Mt=null,mr=null,ei=0,Cn=new Set,rs=1;class te{id=rs++;#e=!1;linked=!0;#t=null;#r=null;async_deriveds=new Map;current=new Map;previous=new Map;#f=new Set;#i=new Set;#s=0;#n=new Map;#a=null;#o=[];#m=[];#c=new Set;#u=new Set;#d=new Map;#v=new Set;is_fork=!1;#l=!1;constructor(){if(Qt===null)Ur=Qt=this;else Qt.#r=this,this.#t=Qt;Qt=this}#x(){if(this.is_fork)return!0;for(let r of this.#n.keys()){var e=r,t=!1;while(e.parent!==null){if(this.#d.has(e)){t=!0;break}e=e.parent}if(!t)return!0}return!1}skip_effect(e){if(!this.#d.has(e))this.#d.set(e,{d:[],m:[]});this.#v.delete(e)}unskip_effect(e,t=(r)=>this.schedule(r)){var r=this.#d.get(e);if(r){this.#d.delete(e);for(var n of r.d)S(n,A),t(n);for(n of r.m)S(n,L),t(n)}this.#v.add(e)}#h(){if(this.#e=!0,ei++>1000)this.#_(),ns();if(f)for(let a of this.current.keys())Cn.add(a);for(let a of this.#c)this.#u.delete(a),S(a,A),this.schedule(a);for(let a of this.#u)S(a,L),this.schedule(a);let e=this.#o;this.#o=[],this.apply();var t=Mt=[],r=[],n=mr=[];for(let a of e)try{this.#b(a,t,r)}catch(u){if(oi(a),!this.#x())this.discard();throw u}if(g=null,n.length>0){var o=te.ensure();for(let a of n)o.schedule(a)}if(Mt=null,mr=null,this.#x()){this.#p(r),this.#p(t);for(let[a,u]of this.#d)ni(a,u);if(n.length>0)g.#h();return}let i=this.#w();if(i){this.#p(r),this.#p(t),i.#y(this);return}this.#c.clear(),this.#u.clear();for(let a of this.#f)a(this);this.#f.clear(),at=this,ti(r),ti(t),at=null,this.#a?.resolve();var s=g;if(this.#s===0&&(this.#o.length===0||s!==null)){if(this.#_(),B)this.#g(),g=s}if(this.#o.length>0)if(s!==null){let a=s;a.#o.push(...this.#o.filter((u)=>!a.#o.includes(u)))}else s=this;if(s!==null)Me.clear(),s.#h()}#b(e,t,r){e.f^=k;var n=e.first;while(n!==null){var o=n.f,i=(o&(V|le))!==0,s=i&&(o&k)!==0,a=s||(o&X)!==0||this.#d.has(n);if(!a&&n.fn!==null){if(i)n.f^=k;else if((o&Ge)!==0)t.push(n);else if(B&&(o&(_t|Tt))!==0)r.push(n);else if(bt(n)){if((o&W)!==0)this.#u.add(n);Xe(n)}var u=n.first;if(u!==null){n=u;continue}}while(n!==null){var v=n.next;if(v!==null){n=v;break}n=n.parent}}}#w(){var e=this.#t;while(e!==null){if(!e.is_fork){for(let[t,[,r]]of this.current)if(e.current.has(t)&&!r)return e}e=e.#t}return null}#y(e){for(let[r,n]of e.current){if(!this.previous.has(r)&&e.previous.has(r))this.previous.set(r,e.previous.get(r));this.current.set(r,n)}for(let[r,n]of e.async_deriveds){let o=this.async_deriveds.get(r);if(o)n.promise.then(o.resolve).catch(o.reject)}e.async_deriveds.clear(),this.transfer_effects(e.#c,e.#u);let t=(r)=>{var n=r.reactions;if(n===null)return;if((r.f&R)!==0&&(r.f&(A|L))===0)return;for(let s of n){var o=s.f;if((o&R)!==0)t(s);else{var i=s;if(o&(Ae|W)&&!this.async_deriveds.has(i))this.#u.delete(i),S(i,A),this.schedule(i)}}};for(let r of this.current.keys())t(r);this.oncommit(()=>e.discard()),e.#_(),g=this,this.#h()}#p(e){for(var t=0;t<e.length;t+=1)Lr(e[t],this.#c,this.#u)}capture(e,t,r=!1){if(e.v!==C&&!this.previous.has(e))this.previous.set(e,e.v);if((e.f&Ne)===0)this.current.set(e,[t,r]),z?.set(e,t);if(!this.is_fork)e.v=t}activate(){g=this}deactivate(){g=null,z=null}flush(){try{if(f)Cn.clear();Rn=!0,g=this,this.#h()}finally{if(ei=0,On=null,Mt=null,mr=null,Rn=!1,g=null,z=null,Me.clear(),f)for(let e of Cn)e.updated=null}}discard(){for(let e of this.#i)e(this);this.#i.clear();for(let e of this.async_deriveds.values())e.reject(Zt);this.#_(),this.#a?.resolve()}register_created_effect(e){this.#m.push(e)}#g(){for(let p=Ur;p!==null;p=p.#r){var e=p.id<this.id,t=[];for(let[d,[c,l]]of this.current){if(p.current.has(d)){var r=p.current.get(d)[0];if(e&&c!==r)p.current.set(d,[c,l]);else continue}t.push(d)}if(e)for(let[d,c]of this.async_deriveds){let l=p.async_deriveds.get(d);if(l)c.promise.then(l.resolve).catch(l.reject)}var n=[...p.current.keys()].filter((d)=>!p.current.get(d)[1]);if(!p.#e||n.length===0)continue;var o=n.filter((d)=>!this.current.has(d));if(o.length===0){if(e)p.discard()}else if(t.length>0){if(f&&!p.#l)Yo(p.#o.length===0,"Batch has scheduled roots");if(e)for(let d of this.#v)p.unskip_effect(d,(c)=>{if((c.f&(W|Ae))!==0)p.schedule(c);else p.#p([c])});p.activate();var i=new Set,s=new Map;for(var a of t)ri(a,o,i,s);s=new Map;var u=[...p.current].filter(([d,c])=>{let l=this.current.get(d);if(!l)return!0;return l[0]!==c[0]||l[1]!==c[1]}).map(([d])=>d);if(u.length>0){for(let d of this.#m)if((d.f&(F|X|mt))===0&&In(d,u,s))if((d.f&(Ae|W))!==0)S(d,A),p.schedule(d);else p.#c.add(d)}if(p.#o.length>0&&!p.#l){p.apply();for(var v of p.#o)p.#b(v,[],[]);p.#o=[]}p.deactivate()}}}increment(e,t){if(this.#s+=1,e){let r=this.#n.get(t)??0;this.#n.set(t,r+1)}}decrement(e,t){if(this.#s-=1,e){let r=this.#n.get(t)??0;if(r===1)this.#n.delete(t);else this.#n.set(t,r-1)}if(this.#l)return;this.#l=!0,Y(()=>{if(this.#l=!1,this.linked)this.flush()})}transfer_effects(e,t){for(let r of e)this.#c.add(r);for(let r of t)this.#u.add(r);e.clear(),t.clear()}oncommit(e){this.#f.add(e)}ondiscard(e){this.#i.add(e)}settled(){return(this.#a??=Er()).promise}static ensure(){if(g===null){let e=g=new te;if(!Rn&&!Ct)Y(()=>{if(!e.#e)e.flush()})}return g}apply(){if(!B||!this.is_fork&&this.#t===null&&this.#r===null){z=null;return}z=new Map;for(let[t,[r]]of this.current)z.set(t,r);for(let t=Ur;t!==null;t=t.#r){if(t===this||t.is_fork)continue;var e=!1;if(t.id<this.id)for(let[r,[,n]]of t.current){if(n)continue;if(this.current.has(r)){e=!0;break}}if(!e){for(let[r,n]of t.previous)if(!z.has(r))z.set(r,n)}}}schedule(e){if(On=e,e.b?.is_pending&&(e.f&(Ge|_t|Tt))!==0&&(e.f&ce)===0){e.b.defer_effect(e);return}var t=e;while(t.parent!==null){t=t.parent;var r=t.f;if(Mt!==null&&t===m){if(B)return;if((x===null||(x.f&R)===0)&&!zo)return}if((r&(le|V))!==0){if((r&k)===0)return;t.f^=k}}this.#o.push(t)}#_(){if(!this.linked)return;var e=this.#t,t=this.#r;if(e===null)Ur=t;else e.#r=t;if(t===null)Qt=e;else t.#t=e;this.linked=!1}}function Lt(e){var t=Ct;Ct=!0;try{var r;if(e){if(g!==null&&!g.is_fork)g.flush();r=e()}while(!0){if(Vo(),g===null)return r;g.flush()}}finally{Ct=t}}function ns(){if(f){var e=new Map;for(let r of g.current.keys())for(let[n,o]of r.updated??[]){var t=e.get(n);if(!t)t={error:o.error,count:0},e.set(n,t);t.count+=o.count}for(let r of e.values())if(r.error)console.error(r.error)}try{Eo()}catch(r){if(f)ne(r,"stack",{value:""});Ye(r,On)}}var De=null;function ti(e){var t=e.length;if(t===0)return;var r=0;while(r<t){var n=e[r++];if((n.f&(F|X))===0&&bt(n)){if(De=new Set,Xe(n),n.deps===null&&n.first===null&&n.nodes===null&&n.teardown===null&&n.ac===null)Dn(n);if(De?.size>0){Me.clear();for(let o of De){if((o.f&(F|X))!==0)continue;let i=[o],s=o.parent;while(s!==null){if(De.has(s))De.delete(s),i.push(s);s=s.parent}for(let a=i.length-1;a>=0;a--){let u=i[a];if((u.f&(F|X))!==0)continue;Xe(u)}}De.clear()}}}De=null}function ri(e,t,r,n){if(r.has(e))return;if(r.add(e),e.reactions!==null)for(let o of e.reactions){let i=o.f;if((i&R)!==0)ri(o,t,r,n);else if((i&(Ae|W))!==0&&(i&A)===0&&In(o,t,n))S(o,A),vr(o)}}function In(e,t,r){let n=r.get(e);if(n!==void 0)return n;if(e.deps!==null)for(let o of e.deps){if(pt.call(t,o))return!0;if((o.f&R)!==0&&In(o,t,r))return r.set(o,!0),!0}return r.set(e,!1),!1}function vr(e){g.schedule(e)}function ni(e,t){if((e.f&V)!==0&&(e.f&k)!==0)return;if((e.f&A)!==0)t.d.push(e);else if((e.f&L)!==0)t.m.push(e);S(e,k);var r=e.first;while(r!==null)ni(r,t),r=r.next}function oi(e){S(e,k);var t=e.first;while(t!==null)oi(t),t=t.next}var It=new Set,Me=new Map;function Br(e){It=e}var Mn=!1;function si(){Mn=!0}function xe(e,t){var r={f:0,v:e,reactions:null,equals:Rr,rv:0,wv:0};if(f&&Pe)r.created=t??qe("created at"),r.updated=null,r.set_during_effect=!1,r.trace=null;return r}function _e(e,t){let r=xe(e,t);return Hr(r),r}function Wt(e,t=!1,r=!0){let n=xe(e);if(!t)n.equals=Cr;if(Nt&&r&&T!==null&&T.l!==null)(T.l.s??=[]).push(n);return n}function O(e,t,r=!1){if(x!==null&&(!me||(x.f&mt)!==0)&&Ke()&&(x.f&(R|W|Ae|mt))!==0&&(He===null||!He.has(e)))ko();let n=r?Ze(t):t;if(f)Ir(n,e.label);return st(e,n,mr)}function st(e,t,r=null){if(!e.equals(t)){if(Ie)Me.set(e,t);else if(!Me.has(e))Me.set(e,e.v);var n=te.ensure();if(n.capture(e,t),f){if(Pe||m!==null){e.updated??=new Map;let o=(e.updated.get("")?.count??0)+1;if(e.updated.set("",{error:null,count:o}),Pe||o>5){let i=qe("updated at");if(i!==null){let s=e.updated.get(i.stack);if(!s)s={error:i,count:0},e.updated.set(i.stack,s);s.count++}}}if(m!==null)e.set_during_effect=!0}if((e.f&R)!==0){let o=e;if((e.f&A)!==0)pr(o);if(z===null)zt(o)}if(e.wv=Jt(),ai(e,A,r),Ke()&&m!==null&&(m.f&k)!==0&&(m.f&(V|le))===0)if(Se===null)fi([e]);else Se.push(e);if(!n.is_fork&&It.size>0&&!Mn)Vr()}return t}function Vr(){Mn=!1;for(let e of It){if((e.f&k)!==0)S(e,L);let t;try{t=bt(e)}catch{t=!0}if(t)Xe(e)}It.clear()}function Ot(e){O(e,e.v+1)}function ai(e,t,r){var n=e.reactions;if(n===null)return;var o=Ke(),i=n.length;for(var s=0;s<i;s++){var a=n[s],u=a.f;if(!o&&a===m)continue;var v=(u&A)===0;if(v)S(a,t);if((u&mt)!==0)It.add(a);else if((u&R)!==0){var p=a;if(z?.delete(p),(u&Te)===0){if(u&K&&(m===null||(m.f&At)===0))a.f|=Te;ai(p,L,r)}}else if(v){var d=a;if((u&W)!==0&&De!==null)De.add(d);if(r!==null)r.push(d);else vr(d)}}}var is=/^[a-zA-Z_$][a-zA-Z_$0-9]*$/;function Ze(e){if(typeof e!=="object"||e===null||oe in e)return e;let t=Yt(e);if(t!==fn&&t!==po)return e;var r=new Map,n=dt(e),o=_e(0),i=f&&Pe?qe("created at"):null,s=wt,a=(d)=>{if(wt===s)return d();var c=x,l=wt;H(null),Ln(s);var _=d();return H(c),Ln(l),_};if(n){if(r.set("length",_e(e.length,i)),f)e=as(e)}var u="";let v=!1;function p(d){if(v)return;v=!0,u=d,de(o,`${u} version`);for(let[c,l]of r)de(l,Ft(u,c));v=!1}return new Proxy(e,{defineProperty(d,c,l){if(!("value"in l)||l.configurable===!1||l.enumerable===!1||l.writable===!1)Ao();var _=r.get(c);if(_===void 0)a(()=>{var b=_e(l.value,i);if(r.set(c,b),f&&typeof c==="string")de(b,Ft(u,c));return b});else O(_,l.value,!0);return!0},deleteProperty(d,c){var l=r.get(c);if(l===void 0){if(c in d){let _=a(()=>_e(C,i));if(r.set(c,_),Ot(o),f)de(_,Ft(u,c))}}else O(l,C),Ot(o);return!0},get(d,c,l){if(c===oe)return e;if(f&&c===Tr)return p;var _=r.get(c),b=c in d;if(_===void 0&&(!b||$e(d,c)?.writable))_=a(()=>{var q=Ze(b?d[c]:C),ye=_e(q,i);if(f)de(ye,Ft(u,c));return ye}),r.set(c,_);if(_!==void 0){var I=h(_);return I===C?void 0:I}return Reflect.get(d,c,l)},getOwnPropertyDescriptor(d,c){var l=Reflect.getOwnPropertyDescriptor(d,c);if(l&&"value"in l){var _=r.get(c);if(_)l.value=h(_)}else if(l===void 0){var b=r.get(c),I=b?.v;if(b!==void 0&&I!==C)return{enumerable:!0,configurable:!0,value:I,writable:!0}}return l},has(d,c){if(c===oe)return!0;var l=r.get(c),_=l!==void 0&&l.v!==C||Reflect.has(d,c);if(l!==void 0||m!==null&&(!_||$e(d,c)?.writable)){if(l===void 0)l=a(()=>{var I=_?Ze(d[c]):C,q=_e(I,i);if(f)de(q,Ft(u,c));return q}),r.set(c,l);var b=h(l);if(b===C)return!1}return _},set(d,c,l,_){var b=r.get(c),I=c in d;if(n&&c==="length")for(var q=l;q<b.v;q+=1){var ye=r.get(q+"");if(ye!==void 0)O(ye,C);else if(q in d){if(ye=a(()=>_e(C,i)),r.set(q+"",ye),f)de(ye,Ft(u,q))}}if(b===void 0){if(!I||$e(d,c)?.writable){if(b=a(()=>_e(void 0,i)),f)de(b,Ft(u,c));O(b,Ze(l)),r.set(c,b)}}else{I=b.v!==C;var $t=a(()=>Ze(l));O(b,$t)}var br=Reflect.getOwnPropertyDescriptor(d,c);if(br?.set)br.set.call(_,l);if(!I){if(n&&typeof c==="string"){var E=r.get("length"),N=Number(c);if(Number.isInteger(N)&&N>=E.v)O(E,N+1)}Ot(o)}return!0},ownKeys(d){h(o);var c=Reflect.ownKeys(d).filter((b)=>{var I=r.get(b);return I===void 0||I.v!==C});for(var[l,_]of r)if(_.v!==C&&!(l in d))c.push(l);return c},setPrototypeOf(){So()}})}function Ft(e,t){if(typeof t==="symbol")return`${e}[Symbol(${t.description??""})]`;if(is.test(t))return`${e}.${t}`;return/^\d+$/.test(t)?`${e}[${t}]`:`${e}['${t}']`}function jr(e){try{if(e!==null&&typeof e==="object"&&oe in e)return e[oe]}catch{}return e}var ss=new Set(["copyWithin","fill","pop","push","reverse","shift","sort","splice","unshift"]);function as(e){return new Proxy(e,{get(t,r,n){var o=Reflect.get(t,r,n);if(!ss.has(r))return o;return function(...i){si();var s=o.apply(this,i);return Vr(),s}}})}function li(){let{prototype:e,__svelte_cleanup:t}=Array;if(t)t();let{indexOf:r,lastIndexOf:n,includes:o}=e;e.indexOf=function(i,s){let a=r.call(this,i,s);if(a===-1){for(let u=s??0;u<this.length;u+=1)if(jr(this[u])===i){kr("array.indexOf(...)");break}}return a},e.lastIndexOf=function(i,s){let a=n.call(this,i,s??this.length-1);if(a===-1){for(let u=0;u<=(s??this.length-1);u+=1)if(jr(this[u])===i){kr("array.lastIndexOf(...)");break}}return a},e.includes=function(i,s){let a=o.call(this,i,s);if(!a){for(let u=0;u<this.length;u+=1)if(jr(this[u])===i){kr("array.includes(...)");break}}return a},Array.__svelte_cleanup=()=>{e.indexOf=r,e.lastIndexOf=n,e.includes=o}}var Fn,ci,fr,ui,di;function Gr(){if(Fn!==void 0)return;Fn=window,ci=document,fr=/Firefox/.test(navigator.userAgent);var e=Element.prototype,t=Node.prototype,r=Text.prototype;if(ui=$e(t,"firstChild").get,di=$e(t,"nextSibling").get,ln(e))e[un]=void 0,e[Ar]=null,e[dn]=void 0,e.__e=void 0;if(ln(r))r[rr]=void 0;if(f)e.__svelte_meta=null,li()}function be(e=""){return document.createTextNode(e)}function ge(e){return ui.call(e)}function se(e){return di.call(e)}function fe(e,t){if(!w)return ge(e);var r=ge(y);if(r===null)r=y.appendChild(be());else if(t&&r.nodeType!==nr){var n=be();return r?.before(n),D(n),n}if(t)qn(r);return D(r),r}function Je(e,t=1,r=!1){let n=w?y:e;var o;while(t--)o=n,n=se(n);if(!w)return n;if(r){if(n?.nodeType!==nr){var i=be();if(n===null)o?.after(i);else n.before(i);return D(i),i}qn(n)}return D(n),n}function Pr(e){e.textContent=""}function Pn(){if(!B)return!1;if(De!==null)return!1;var e=m.f;return(e&ce)!==0}function ft(e,t,r){if(t==null||t===Sr)return r?document.createElement(e,{is:r}):document.createElement(e);return r?document.createElementNS(t,e,{is:r}):document.createElementNS(t,e)}function qn(e){if(e.nodeValue.length<65536)return;let t=e.nextSibling;while(t!==null&&t.nodeType===nr)t.remove(),e.nodeValue+=t.nodeValue,t=e.nextSibling}function pi(e){if(m===null){if(x===null)yo(e);wo()}if(Ie)bo(e)}function fs(e,t){var r=t.last;if(r===null)t.last=t.first=e;else r.next=e,e.prev=r,t.last=e}function Qe(e,t){var r=m;if(f)while(r!==null&&(r.f&mt)!==0)r=r.parent;if(r!==null&&(r.f&X)!==0)e|=X;var n={ctx:T,deps:null,nodes:null,f:e|A|K,first:null,fn:t,last:null,next:null,parent:r,b:r&&r.b,prev:null,teardown:null,wv:0,ac:null};if(f)n.component_function=Be;g?.register_created_effect(n);var o=n;if((e&Ge)!==0)if(Mt!==null)Mt.push(n);else te.ensure().schedule(n);else if(t!==null){try{Xe(n)}catch(s){throw P(n),s}if(o.deps===null&&o.teardown===null&&o.nodes===null&&o.first===o.last&&(o.f&ze)===0){if(o=o.first,(e&W)!==0&&(e&he)!==0&&o!==null)o.f|=he}}if(o!==null){if(o.parent=r,r!==null)fs(o,r);if(x!==null&&(x.f&R)!==0&&(e&le)===0){var i=x;(i.effects??=[]).push(o)}}return n}function gt(){return x!==null&&!me}function ee(e){let t=Qe(_t,null);return S(t,k),t.teardown=e,t}function hr(e){if(pi("$effect"),f)ne(e,"name",{value:"$effect"});var t=m.f,r=!x&&(t&V)!==0&&T!==null&&!T.i;if(r){var n=T;(n.e??=[]).push(e)}else return gn(e)}function gn(e){return Qe(Ge|_o,e)}function Yn(e){te.ensure();let t=Qe(le|ze,e);return()=>{P(t)}}function _i(e){te.ensure();let t=Qe(le|ze,e);return(r={})=>new Promise((n)=>{if(r.outro)xt(t,()=>{P(t),n(void 0)});else P(t),n(void 0)})}function ke(e){return Qe(Ge,e)}function Qo(e){return Qe(Ae|ze,e)}function j(e,t=0){return Qe(_t|t,e)}function yt(e,t=[],r=[],n=[]){qr(n,t,r,(o)=>{Qe(_t,()=>{e(...o.map(h))})})}function Oe(e,t=0){var r=Qe(W|t,e);if(f)r.dev_stack=We;return r}function ae(e){return Qe(V|ze,e)}function Hn(e){var t=e.teardown;if(t!==null){let r=Ie,n=x;Bn(!0),H(null);try{t.call(null)}finally{Bn(r),H(n)}}}function _r(e,t=!1){var r=e.first;e.first=e.last=null;while(r!==null){let o=r.ac;if(o!==null)Ce(()=>{o.abort(tt)});var n=r.next;if((r.f&le)!==0)r.parent=null;else P(r,t);r=n}}function mi(e){var t=e.first;while(t!==null){var r=t.next;if((t.f&V)===0)P(t);t=r}}function P(e,t=!0){var r=!1;if((t||(e.f&cn)!==0)&&e.nodes!==null&&e.nodes.end!==null)vi(e.nodes.start,e.nodes.end),r=!0;e.f|=Ut,_r(e,t&&!r),Dt(e,0);var n=e.nodes&&e.nodes.t;if(n!==null)for(let i of n)i.stop();Hn(e),e.f^=Ut,e.f|=F;var o=e.parent;if(o!==null&&o.first!==null)Dn(e);if(f)e.component_function=null;e.next=e.prev=e.teardown=e.ctx=e.deps=e.fn=e.nodes=e.ac=e.b=null}function vi(e,t){while(e!==null){var r=e===t?null:se(e);e.remove(),e=r}}function Dn(e){var{parent:t,prev:r,next:n}=e;if(r!==null)r.next=n;if(n!==null)n.prev=r;if(t!==null){if(t.first===e)t.first=n;if(t.last===e)t.last=r}}function xt(e,t,r=!0){var n=[];hi(e,n,!0);var o=()=>{if(r)P(e);if(t)t()},i=n.length;if(i>0){var s=()=>--i||o();for(var a of n)a.out(s)}else o()}function hi(e,t,r){if((e.f&X)!==0)return;e.f^=X;var n=e.nodes&&e.nodes.t;if(n!==null){for(let a of n)if(a.is_global||r)t.push(a)}var o=e.first;while(o!==null){var i=o.next;if((o.f&le)===0){var s=(o.f&he)!==0||(o.f&V)!==0&&(e.f&W)!==0;hi(o,t,s?r:!1)}o=i}}function zr(e){gi(e,!0)}function gi(e,t){if((e.f&X)===0)return;if(e.f^=X,(e.f&k)===0)S(e,A),te.ensure().schedule(e);var r=e.first;while(r!==null){var n=r.next,o=(r.f&he)!==0||(r.f&V)!==0;gi(r,o?t:!1),r=n}var i=e.nodes&&e.nodes.t;if(i!==null){for(let s of i)if(s.is_global||t)s.in()}}function cr(e,t){if(!e.nodes)return;var r=e.nodes.start,n=e.nodes.end;while(r!==null){var o=r===n?null:se(r);t.append(r),r=o}}var xi=null;var Wr=!1,Ie=!1;function Bn(e){Ie=e}var x=null,me=!1;function H(e){x=e}var m=null;function U(e){m=e}var He=null;function Hr(e){if(x!==null&&(!B||(x.f&R)!==0))(He??=new Set).add(e)}var G=null,pe=0,Se=null;function fi(e){Se=e}var bi=1,Pt=0,wt=Pt;function Ln(e){wt=e}function Jt(){return++bi}function bt(e){var t=e.f;if((t&A)!==0)return!0;if(t&R)e.f&=~Te;if((t&L)!==0){var r=e.deps,n=r.length;for(var o=0;o<n;o++){var i=r[o];if(bt(i))kn(i);if(i.wv>e.wv)return!0}if((t&K)!==0&&z===null)S(e,k)}return!1}function wi(e,t,r=!0){var n=e.reactions;if(n===null)return;if(!B&&He!==null&&He.has(e))return;for(var o=0;o<n.length;o++){var i=n[o];if((i.f&R)!==0)wi(i,t,!1);else if(t===i){if(r)S(i,A);else if((i.f&k)!==0)S(i,L);vr(i)}}}function Yr(e){var t=G,r=pe,n=Se,o=x,i=He,s=T,a=me,u=wt,v=e.f;if(G=null,pe=0,Se=null,x=(v&(V|le))===0?e:null,He=null,it(e.ctx),me=!1,wt=++Pt,e.ac!==null)Ce(()=>{e.ac.abort(tt)}),e.ac=null;try{e.f|=At;var p=e.fn,d=p();e.f|=ce;var c=e.deps,l=g?.is_fork;if(G!==null){var _;if(!l)Dt(e,pe);if(c!==null&&pe>0){c.length=pe+G.length;for(_=0;_<G.length;_++)c[pe+_]=G[_]}else e.deps=c=G;if(gt()&&(e.f&K)!==0)for(_=pe;_<c.length;_++)(c[_].reactions??=[]).push(e)}else if(!l&&c!==null&&pe<c.length)Dt(e,pe),c.length=pe;if(Ke()&&Se!==null&&!me&&c!==null&&(e.f&(R|L|A))===0)for(_=0;_<Se.length;_++)wi(Se[_],e);if(o!==null&&o!==e){if(Pt++,o.deps!==null)for(let b=0;b<r;b+=1)o.deps[b].rv=Pt;if(t!==null)for(let b of t)b.rv=Pt;if(Se!==null)if(n===null)n=Se;else n.push(...Se)}if((e.f&Ne)!==0)e.f^=Ne;return d}catch(b){return Mr(b)}finally{e.f^=At,G=t,pe=r,Se=n,x=o,He=i,it(s),me=a,wt=u}}function ls(e,t){let r=t.reactions;if(r!==null){var n=uo.call(r,e);if(n!==-1){var o=r.length-1;if(o===0)r=t.reactions=null;else r[n]=r[o],r.pop()}}if(r===null&&(t.f&R)!==0&&(G===null||!pt.call(G,t))){var i=t;if((i.f&K)!==0)i.f^=K,i.f&=~Te;if(i.v!==C)zt(i);if(i.ac!==null)Ce(()=>{i.ac.abort(tt),i.ac=null,S(i,A)});Jo(i),Dt(i,0)}}function Dt(e,t){var r=e.deps;if(r===null)return;for(var n=t;n<r.length;n++)ls(e,r[n])}function Xe(e){var t=e.f;if((t&F)!==0)return;S(e,k);var r=m,n=Wr;if(m=e,Wr=(t&(V|le))===0,f){var o=Be;Dr(e.component_function);var i=We;Gt(e.dev_stack??We)}try{if((t&(W|Tt))!==0)mi(e);else _r(e);Hn(e);var s=Yr(e);if(e.teardown=typeof s==="function"?s:null,e.wv=bi,f&&Pe&&(e.f&A)!==0&&e.deps!==null){for(var a of e.deps)if(a.set_during_effect)a.wv=Jt(),a.set_during_effect=!1}}finally{if(Wr=n,m=r,f)Dr(o),Gt(i)}}async function lr(){if(B)return new Promise((e)=>{requestAnimationFrame(()=>e()),setTimeout(()=>e())});await Promise.resolve(),Lt()}function h(e){var t=e.f,r=(t&R)!==0;if(xi?.add(e),x!==null&&!me){var n=m!==null&&(m.f&F)!==0;if(!n&&(He===null||!He.has(e))){var o=x.deps;if((x.f&At)!==0){if(e.rv<Pt)if(e.rv=Pt,G===null&&o!==null&&o[pe]===e)pe++;else if(G===null)G=[e];else G.push(e)}else{if(x.deps??=[],!pt.call(x.deps,e))x.deps.push(e);var i=e.reactions;if(i===null)e.reactions=[x];else if(!pt.call(i,x))i.push(x)}}}if(f){if(!me&&we&&g===null&&at===null&&!we.warned&&(we.effect.f&At)===0&&!we.effect_deps.has(e)){we.warned=!0,Io(e.label);var s=qe("traced at");if(s)console.warn(s)}if(dr.delete(e),Pe&&!me&&ir!==null&&x!==null&&ir.reaction===x){if(e.trace)e.trace();else if(s=qe("traced at"),s){var a=ir.entries.get(e);if(a===void 0)a={traces:[]},ir.entries.set(e,a);var u=a.traces[a.traces.length-1];if(s.stack!==u?.stack)a.traces.push(s)}}}if(Ie&&Me.has(e))return Me.get(e);if(r){var v=e;if(Ie){var p=v.v;if((v.f&k)===0&&v.reactions!==null||Ei(v))p=pr(v);return Me.set(v,p),p}var d=(v.f&K)===0&&!me&&x!==null&&(Wr||(x.f&K)!==0),c=(v.f&ce)===0;if(bt(v)){if(d)v.f|=K;kn(v)}if(d&&!c)Nn(v),yi(v)}if(z?.has(e))return z.get(e);if((e.f&Ne)!==0)throw e.v;return e.v}function yi(e){if(e.f|=K,e.deps===null)return;for(let t of e.deps)if((t.reactions??=[]).push(e),(t.f&R)!==0&&(t.f&K)===0)Nn(t),yi(t)}function Ei(e){if(e.v===C)return!0;if(e.deps===null)return!1;for(let t of e.deps){if(Me.has(t))return!0;if((t.f&R)!==0&&Ei(t))return!0}return!1}function M(e){var t=me;try{return me=!0,e()}finally{me=t}}var us=["allowfullscreen","async","autofocus","autoplay","checked","controls","default","disabled","formnovalidate","indeterminate","inert","ismap","loop","multiple","muted","nomodule","novalidate","open","playsinline","readonly","required","reversed","seamless","selected","webkitdirectory","defer","disablepictureinpicture","disableremoteplayback"];var Nu=[...us,"formNoValidate","isMap","noModule","playsInline","readOnly","value","volume","defaultValue","defaultChecked","srcObject","noValidate","allowFullscreen","disablePictureInPicture","disableRemotePlayback"];var ds=["touchstart","touchmove"];function $i(e){return ds.includes(e)}var ps=["$state","$state.raw","$derived","$derived.by"],Ru=[...ps,"$state.eager","$state.snapshot","$props","$props.id","$bindable","$effect","$effect.pre","$effect.tracking","$effect.root","$effect.pending","$inspect","$inspect().with","$inspect.trace","$host"];var gr=Symbol("events"),Si=new Set,jn=new Set;function ki(e,t,r,n={}){function o(i){if(!n.capture)Xr.call(t,i);if(!i.cancelBubble)return Ce(()=>r?.call(this,i))}if(e.startsWith("pointer")||e.startsWith("touch")||e==="wheel")Y(()=>{t.addEventListener(e,o,n)});else t.addEventListener(e,o,n);return o}function Kr(e,t,r,n,o){var i={capture:n,passive:o},s=ki(e,t,r,i);if(t===document.body||t===window||t===document||t instanceof HTMLMediaElement)ee(()=>{t.removeEventListener(e,s,i)})}var Un=null,Vn=!1;function Xr(e){var t=this,r=t.ownerDocument,n=e.type,o=e.composedPath?.()||[],i=o[0]||e.target;if(Un=e,!Vn)Vn=!0,setTimeout(()=>{Vn=!1,Un=null});var s=0,a=Un===e&&e[gr];if(a){var u=o.indexOf(a);if(u!==-1&&(t===document||t===window)){e[gr]=t;return}var v=o.indexOf(t);if(v===-1)return;if(u<=v)s=u}if(i=o[s]||e.target,i===t)return;ne(e,"currentTarget",{configurable:!0,get(){return i||r}});var p=x,d=m;H(null),U(null);try{var c,l=[];while(i!==null){if(i===t)break;try{var _=i[gr]?.[n];if(_!=null&&(!i.disabled||e.target===i))_.call(i,e)}catch(b){if(c)l.push(b);else c=b}if(e.cancelBubble)break;s++,i=s<o.length?o[s]:null}if(c){for(let b of l)queueMicrotask(()=>{throw b});throw c}}finally{e[gr]=t,delete e.currentTarget,H(p),U(d)}}var ms=globalThis?.window?.trustedTypes&&globalThis.window.trustedTypes.createPolicy("svelte-trusted-html",{createHTML:(e)=>e});function Ni(e){return ms?.createHTML(e)??e}function Gn(e){var t=ft("template");return t.innerHTML=Ni(e.replaceAll("<!>","<!---->")),t.content}function lt(e,t){var r=m;if(r.nodes===null)r.nodes={start:e,end:t,a:null,t:null}}function qt(e,t){var r=(t&Ro)!==0,n=(t&Co)!==0,o,i=!e.startsWith("<!>");return()=>{if(w)return lt(y,null),y;if(o===void 0){if(o=Gn(i?e:"<!>"+e),!r)o=ge(o)}var s=n||fr?document.importNode(o,!0):o.cloneNode(!0);if(r){var a=ge(s),u=s.lastChild;lt(a,u)}else lt(s,s);return s}}function ct(e,t){if(w){var r=m;if((r.f&ce)===0||r.nodes.end===null)r.nodes.end=y;ue();return}if(e===null)return;e.before(t)}var Wn=!0;function ut(e,t){var r=t==null?"":typeof t==="object"?`${t}`:t;if(r!==(e[rr]??=e.nodeValue))e[rr]=r,e.nodeValue=`${r}`}function er(e,t){return Ri(e,t)}function Xn(e,t){Gr(),t.intro=t.intro??!1;let r=t.target,n=w,o=y;try{var i=ge(r);while(i&&(i.nodeType!==Fe||i.data!==Vt))i=se(i);if(!i)throw rt;ie(!0),D(i);let s=Ri(e,{...t,anchor:i});return ie(!1),s}catch(s){if(s instanceof Error&&s.message.split(`
+`).some((a)=>a.startsWith("https://svelte.dev/e/")))throw s;if(s!==rt)console.warn("Failed to hydrate: ",s);if(t.recover===!1)$o();return Gr(),Pr(r),ie(!1),er(e,t)}finally{ie(n),D(o)}}var Zr=new Map;function Ri(e,{target:t,anchor:r,props:n={},events:o,context:i,intro:s=!0,transformError:a}){Gr();var u=void 0,v=_i(()=>{var p=r??t.appendChild(be());wn(p,{pending:()=>{}},(l)=>{sr({});var _=T;if(i)_.c=i;if(o)n.$$events=o;if(w)lt(l,null);if(Wn=s,u=e(l,n)||{},Wn=!0,w){if(m.nodes.end=y,y===null||y.nodeType!==Fe||y.data!==jt)throw kt(),rt}ar()},a);var d=new Set,c=(l)=>{for(var _=0;_<l.length;_++){var b=l[_];if(d.has(b))continue;d.add(b);var I=$i(b);for(let $t of[t,document]){var q=Zr.get($t);if(q===void 0)q=new Map,Zr.set($t,q);var ye=q.get(b);if(ye===void 0)$t.addEventListener(b,Xr,{passive:I}),q.set(b,1);else q.set(b,ye+1)}}};return c(on(Si)),jn.add(c),()=>{for(var l of d)for(let I of[t,document]){var _=Zr.get(I),b=_.get(l);if(--b==0){if(I.removeEventListener(l,Xr),_.delete(l),_.size===0)Zr.delete(I)}else _.set(l,b)}if(jn.delete(c),p!==r)p.parentNode?.removeChild(p)}});return Kn.set(u,v),u}var Kn=new WeakMap;function Zn(e,t){let r=Kn.get(e);if(r)return Kn.delete(e),r(t);if(f)if(oe in e)Po();else Fo();return Promise.resolve()}class Et{anchor;#e=new Map;#t=new Map;#r=new Map;#f=new Set;#i=!0;constructor(e,t=!0){this.anchor=e,this.#i=t}#s=(e)=>{if(!this.#e.has(e))return;var t=this.#e.get(e),r=this.#t.get(t);if(r)zr(r),this.#f.delete(t);else{var n=this.#r.get(t);if(n){if(zr(n.effect),this.#t.set(t,n.effect),this.#r.delete(t),f)n.fragment.lastChild[pn]=this.anchor;n.fragment.lastChild.remove(),this.anchor.before(n.fragment),r=n.effect}}for(let[o,i]of this.#e){if(this.#e.delete(o),o===e)break;let s=this.#r.get(i);if(s)P(s.effect),this.#r.delete(i)}for(let[o,i]of this.#t){if(o===t||this.#f.has(o))continue;let s=()=>{if(Array.from(this.#e.values()).includes(o)){var u=document.createDocumentFragment();cr(i,u),u.append(be()),this.#r.set(o,{effect:i,fragment:u})}else P(i);this.#f.delete(o),this.#t.delete(o)};if(this.#i||!r)this.#f.add(o),xt(i,s,!1);else s()}};#n=(e)=>{this.#e.delete(e);let t=Array.from(this.#e.values());for(let[r,n]of this.#r)if(!t.includes(r))P(n.effect),this.#r.delete(r)};ensure(e,t){var r=g,n=Pn();if(t&&!this.#t.has(e)&&!this.#r.has(e))if(n){var o=document.createDocumentFragment(),i=be();o.append(i),this.#r.set(e,{effect:ae(()=>t(i)),fragment:o})}else this.#t.set(e,ae(()=>t(this.anchor)));if(this.#e.set(r,e),n){for(let[s,a]of this.#t)if(s===e)r.unskip_effect(a);else r.skip_effect(a);for(let[s,a]of this.#r)if(s===e)r.unskip_effect(a.effect);else r.skip_effect(a.effect);r.oncommit(this.#s),r.ondiscard(this.#n)}else{if(w)this.anchor=y;this.#s(r)}}}function Jn(e,t,r=!1){var n;if(w)n=y,ue();var o=new Et(e),i=r?he:0;function s(a,u){if(w){var v=Nr(n);if(a!==parseInt(v.substring(1))){var p=ht();D(p),o.anchor=p,ie(!1),o.ensure(a,u),ie(!0);return}}o.ensure(a,u)}Oe(()=>{var a=!1;if(t((u,v=0)=>{a=!0,s(v,u)}),!a)s(-1,null)},i)}var Dp=Symbol("NaN");var nv=[...` 	
+\r\f \v\uFEFF`];var Is=Symbol("class"),Ds=Symbol("style"),Ms=Symbol("is custom element"),Ls=Symbol("is html"),Fs=_n?"link":"LINK";function eo(e){if(!w)return;var t=!1,r=()=>{if(t)return;if(t=!0,e.hasAttribute("value")){var n=e.value;Bt(e,"value",null),e.value=n}if(e.hasAttribute("checked")){var o=e.checked;Bt(e,"checked",null),e.checked=o}};e[vt]=r,Y(r),Fr()}function Bt(e,t,r,n){var o=Ps(e);if(w){if(o[t]=e.getAttribute(t),t==="src"||t==="srcset"||t==="href"&&e.nodeName===Fs){if(!n)Bs(e,t,r??"");return}}if(o[t]===(o[t]=r))return;if(t==="loading")e[mo]=r;if(r==null)e.removeAttribute(t);else if(typeof r!=="string"&&qs(e).includes(t))e[t]=r;else e.setAttribute(t,r)}function Ps(e){return e[Ar]??={[Ms]:e.nodeName.includes("-"),[Ls]:e.namespaceURI===Sr}}var Oi=new Map;function qs(e){var t=e.getAttribute("is")||e.nodeName,r=Oi.get(t);if(r)return r;Oi.set(t,r=[]);var n,o=e,i=Element.prototype;while(i!==o){n=an(o);for(var s in n)if(n[s].set&&s!=="innerHTML"&&s!=="textContent"&&s!=="innerText")r.push(s);o=Yt(o)}return r}function Bs(e,t,r){if(!f)return;if(t==="srcset"&&Ys(e,r))return;if(Qn(e.getAttribute(t)??"",r))return;Lo(t,e.outerHTML.replace(e.innerHTML,e.innerHTML&&"..."),String(r))}function Qn(e,t){if(e===t)return!0;return new URL(e,document.baseURI).href===new URL(t,document.baseURI).href}function Ii(e){return e.split(",").map((t)=>t.trim().split(" ").filter(Boolean))}function Ys(e,t){var r=Ii(e.srcset),n=Ii(t);return n.length===r.length&&n.every(([o,i],s)=>i===r[s][1]&&(Qn(r[s][0],o)||Qn(o,r[s][0])))}function no(e,t,r=t){var n=new WeakSet;if(bn(e,"input",async(o)=>{if(f&&e.type==="checkbox")mn();var i=o?e.defaultValue:e.value;if(i=to(e)?ro(i):i,r(i),g!==null)n.add(g);if(await lr(),i!==(i=t())){var{selectionStart:s,selectionEnd:a}=e,u=e.value.length;if(e.value=i??"",a!==null){var v=e.value.length;if(s===a&&a===u&&v>u)e.selectionStart=v,e.selectionEnd=v;else e.selectionStart=s,e.selectionEnd=Math.min(a,v)}}}),w&&e.defaultValue!==e.value||M(t)==null&&e.value){if(r(to(e)?ro(e.value):e.value),g!==null)n.add(g)}j(()=>{if(f&&e.type==="checkbox")mn();var o=t();if(e===document.activeElement){var i=B?at:g;if(n.has(i))return}if(to(e)&&o===ro(e.value))return;if(e.type==="date"&&!o&&!e.value)return;if(o!==e.value)e.value=o??""})}function to(e){var t=e.type;return t==="number"||t==="range"}function ro(e){return e===""?null:+e}function oo(e,t){return e===t||e?.[oe]===t}function Qr(e={},t,r,n){var o=T.r,i=m;return ke(()=>{var s,a;return j(()=>{s=a,a=n?.()||[],M(()=>{if(!oo(r(...a),e)){if(t(e,...a),s&&oo(r(...s),e))t(null,...s)}})}),()=>{let u=i;while(u!==o&&u.parent!==null&&u.parent.f&Ut)u=u.parent;let v=()=>{if(a&&oo(r(...a),e))t(null,...a)},p=u.teardown;u.teardown=()=>{v(),p?.()}}}),e}function Mi(e){return new Li(e)}class Li{#e;#t;constructor(e){var t=new Map,r=(o,i)=>{var s=Wt(i,!1,!1);return t.set(o,s),s};let n=new Proxy({...e.props||{},$$events:{}},{get(o,i){return h(t.get(i)??r(i,Reflect.get(o,i)))},has(o,i){if(i===$r)return!0;return h(t.get(i)??r(i,Reflect.get(o,i))),Reflect.has(o,i)},set(o,i,s){return O(t.get(i)??r(i,s),s),Reflect.set(o,i,s)}});if(this.#t=(e.hydrate?Xn:er)(e.component,{target:e.target,anchor:e.anchor,props:n,context:e.context,intro:e.intro??!1,recover:e.recover,transformError:e.transformError}),!B&&(!e?.props?.$$host||e.sync===!1))Lt();this.#e=n.$$events;for(let o of Object.keys(this.#t)){if(o==="$set"||o==="$destroy"||o==="$on")continue;ne(this,o,{get(){return this.#t[o]},set(i){this.#t[o]=i},enumerable:!0})}this.#t.$set=(o)=>{Object.assign(n,o)},this.#t.$destroy=()=>{Zn(this.#t)}}$set(e){this.#t.$set(e)}$on(e,t){this.#e[e]=this.#e[e]||[];let r=(...n)=>t.call(this,...n);return this.#e[e].push(r),()=>{this.#e[e]=this.#e[e].filter((n)=>n!==r)}}$destroy(){this.#t.$destroy()}}var Xs;if(typeof HTMLElement==="function")Xs=class extends HTMLElement{$$ctor;$$s;$$c;$$cn=!1;$$d={};$$r=!1;$$p_d={};$$l={};$$l_u=new Map;$$me;$$shadowRoot=null;constructor(e,t,r){super();if(this.$$ctor=e,this.$$s=t,r)this.$$shadowRoot=this.attachShadow(r)}addEventListener(e,t,r){if(this.$$l[e]=this.$$l[e]||[],this.$$l[e].push(t),this.$$c){let n=this.$$c.$on(e,t);this.$$l_u.set(t,n)}super.addEventListener(e,t,r)}removeEventListener(e,t,r){if(super.removeEventListener(e,t,r),this.$$c){let n=this.$$l_u.get(t);if(n)n(),this.$$l_u.delete(t)}}async connectedCallback(){if(this.$$cn=!0,!this.$$c){let e=function(n){return(o)=>{let i=ft("slot");if(n!=="default")i.name=n;ct(o,i)}};if(await Promise.resolve(),!this.$$cn||this.$$c)return;let t={},r=Zs(this);for(let n of this.$$s)if(n in r)if(n==="default"&&!this.$$d.children)this.$$d.children=e(n),t.default=!0;else t[n]=e(n);for(let n of this.attributes){let o=this.$$g_p(n.name);if(!(o in this.$$d))this.$$d[o]=so(o,n.value,this.$$p_d,"toProp")}for(let n in this.$$p_d)if(!(n in this.$$d)&&this[n]!==void 0)this.$$d[n]=this[n],delete this[n];this.$$c=Mi({component:this.$$ctor,target:this.$$shadowRoot||this,props:{...this.$$d,$$slots:t,$$host:this}}),this.$$me=Yn(()=>{j(()=>{this.$$r=!0;for(let n of sn(this.$$c)){if(!this.$$p_d[n]?.reflect)continue;this.$$d[n]=this.$$c[n];let o=so(n,this.$$d[n],this.$$p_d,"toAttribute");if(o==null)this.removeAttribute(this.$$p_d[n].attribute||n);else this.setAttribute(this.$$p_d[n].attribute||n,o)}this.$$r=!1})});for(let n in this.$$l)for(let o of this.$$l[n]){let i=this.$$c.$on(n,o);this.$$l_u.set(o,i)}this.$$l={}}}attributeChangedCallback(e,t,r){if(this.$$r)return;e=this.$$g_p(e),this.$$d[e]=so(e,r,this.$$p_d,"toProp"),this.$$c?.$set({[e]:this.$$d[e]})}disconnectedCallback(){this.$$cn=!1,Promise.resolve().then(()=>{if(!this.$$cn&&this.$$c)this.$$c.$destroy(),this.$$me(),this.$$c=void 0})}$$g_p(e){return sn(this.$$p_d).find((t)=>this.$$p_d[t].attribute===e||!this.$$p_d[t].attribute&&t.toLowerCase()===e)||e}};function so(e,t,r,n){let o=r[e]?.type;if(t=o==="Boolean"&&typeof t!=="boolean"?t!=null:t,!n||!r[e])return t;else if(n==="toAttribute")switch(o){case"Object":case"Array":return t==null?null:JSON.stringify(t);case"Boolean":return t?"":null;case"Number":return t==null?null:t;default:return t}else switch(o){case"Object":case"Array":return t&&JSON.parse(t);case"Boolean":return t;case"Number":return t!=null?+t:t;default:return t}}function Zs(e){let t={};return e.childNodes.forEach((r)=>{t[r.slot||"default"]=!0}),t}if(f){let e=function(t){if(!(t in globalThis)){let r;Object.defineProperty(globalThis,t,{configurable:!0,get:()=>{if(r!==void 0)return r;To(t)},set:(n)=>{r=n}})}};e("$state"),e("$effect"),e("$derived"),e("$inspect"),e("$props"),e("$bindable")}var Fi="5";if(typeof window<"u")((window.__svelte??={}).v??=new Set).add(Fi);var en={accept:"*/*","accept-language":"en-GB,en;q=0.9"};function Qs(e){return new Promise((t)=>setTimeout(t,e))}async function tn(e,t,r){let n=0;for(;;){let o=await fetch(e,t);if(o.status!==429||n>=10)return o;n+=1;let i=Number(o.headers.get("retry-after")),s=Number.isFinite(i)&&i>0?Math.max(i*1000,1e4):1e4;r?.({attempt:n,waitMs:s}),await Qs(s)}}function Pi(e){let t=e.match(/AvatarHeadshot-([A-Fa-f0-9]+)/);return t?.[1]?t[1].toUpperCase():e}async function qi(e,t){let r=await tn("https://users.roblox.com/v1/usernames/users",{headers:{...en,"content-type":"application/json"},referrer:"https://www.roblox.com/",body:JSON.stringify({usernames:[e],excludeBannedUsers:!0}),method:"POST",mode:"cors",credentials:"omit"},t);if(!r.ok)throw Error(`Username lookup failed (${r.status})`);return(await r.json()).data?.[0]??null}async function Bi(e,t){let r=await tn(`https://thumbnails.roblox.com/v1/users/avatar-headshot?userIds=${e}&size=150x150&format=Png&isCircular=false`,{headers:en,referrer:"https://www.roblox.com/",method:"GET",mode:"cors",credentials:"include"},t);if(!r.ok)throw Error(`Avatar lookup failed (${r.status})`);return(await r.json()).data?.[0]?.imageUrl??null}async function Yi(e,t,r){let n=[],o="";do{let i=await tn(`https://games.roblox.com/v1/games/${e}/servers/Public?limit=100&cursor=${o}`,{headers:en,referrer:"https://www.roblox.com/",method:"GET",mode:"cors",credentials:"include"},r);if(!i.ok)throw Error(`Server list failed (${i.status})`);let s=await i.json();n.push(...s.data??[]),t?.(n.length),o=s.nextPageCursor??""}while(o);return n}async function ea(e,t){let r=await tn("https://thumbnails.roblox.com/v1/batch",{headers:{...en,"content-type":"application/json"},referrer:"https://www.roblox.com/",body:JSON.stringify(e),method:"POST",mode:"cors",credentials:"omit"},t);if(!r.ok)throw Error(`Batch thumbnail failed (${r.status})`);return(await r.json()).data??[]}async function Hi(e,t,r,n){let o=Pi(t),i=new Map,s=[];e.forEach((p,d)=>{p.playerTokens.forEach((c,l)=>{let _=`${d}:${l}`;i.set(_,p),s.push({token:c,type:"AvatarHeadshot",size:"150x150",requestId:_})})});let a=100,u=s.length,v=0;for(let p=0;p<s.length;p+=a){let d=s.slice(p,p+a),c=await ea(d,n);for(let l of c){if(!l.imageUrl)continue;if(Pi(l.imageUrl)===o){let _=i.get(l.requestId);if(_)return{server:_,imageUrl:l.imageUrl}}}v+=d.length,r?.(v,u)}return null}function ao(e){return e.match(/\/games\/(\d+)/)?.[1]??null}var Ui=globalThis.VM,Vi=(...e)=>Ui.getPanel(...e),ji=(...e)=>Ui.showToast(...e);var ta=qt('<div class="loading svelte-1n46o8q"> </div>'),ra=qt('<div class="error svelte-1n46o8q"> </div>'),na=qt('<div class="card svelte-1n46o8q"><img class="avatar svelte-1n46o8q" alt=""/> <div class="info svelte-1n46o8q"><div class="name svelte-1n46o8q"> </div> <div class="found svelte-1n46o8q">Found in a server ✓</div> <div class="meta svelte-1n46o8q"> </div> <div class="serverId svelte-1n46o8q"> </div> <a class="join svelte-1n46o8q" target="_blank" rel="noreferrer">Join server</a></div></div>'),oa=qt('<div class="card svelte-1n46o8q"><img class="avatar svelte-1n46o8q" alt=""/> <div class="info svelte-1n46o8q"><div class="name svelte-1n46o8q"> </div> <div class="notFound svelte-1n46o8q">Not found in any public server.</div></div></div>'),ia=qt('<div class="root svelte-1n46o8q"><div class="header svelte-1n46o8q">rogrep — find a user in a server</div> <form class="form svelte-1n46o8q"><input class="input svelte-1n46o8q" type="text" placeholder="Roblox username"/> <button class="button svelte-1n46o8q" type="submit"> </button></form> <div class="result svelte-1n46o8q"><!></div></div>');function fo(e,t){sr(t,!0);let r=_e(""),n=_e(Ze({kind:"idle"})),o=_e(void 0),i=_e(void 0),s=Sn(()=>h(n).kind==="loading");function a(E){E.stopPropagation()}hr(()=>{let E=h(o),N=h(i);if(!E||!N)return;return E.addEventListener("mousedown",a),N.addEventListener("mousedown",a),()=>{E.removeEventListener("mousedown",a),N.removeEventListener("mousedown",a)}});function u(E){return`https://www.roblox.com/games/start?placeId=${ao(location.href)}&gameInstanceId=${E}`}async function v(){let E=h(r).trim();if(!E){ji("Enter a username first",{theme:"dark"});return}let N=ao(location.href);if(!N){O(n,{kind:"error",message:"Could not detect a game id in the URL."},!0);return}let ve,Ee=()=>{if(ve)clearInterval(ve),ve=void 0},Le=({waitMs:re})=>{Ee();let Ve=Math.ceil(re/1000),et=()=>{O(n,{kind:"loading",message:`Rate limited (429) — retrying in ${Ve}s…`},!0)};et(),ve=setInterval(()=>{if(Ve-=1,Ve<=0){Ee();return}et()},1000)},Ue=(re)=>{Ee(),O(n,re,!0)};try{Ue({kind:"loading",message:`Looking up "${E}"…`});let re=await qi(E,Le);if(!re){Ee(),O(n,{kind:"error",message:`No user found named "${E}".`},!0);return}Ue({kind:"loading",message:"Fetching avatar…"});let Ve=await Bi(re.id,Le);if(!Ve){Ee(),O(n,{kind:"error",message:"Could not load the user avatar."},!0);return}Ue({kind:"loading",message:"Loading servers…"});let et=await Yi(N,(tr)=>{Ue({kind:"loading",message:`Loading servers… (${tr})`})},Le);Ue({kind:"loading",message:`Scanning ${et.length} servers…`});let wr=await Hi(et,Ve,(tr,nn)=>{Ue({kind:"loading",message:`Scanning players… (${tr}/${nn})`})},Le);if(Ee(),wr)O(n,{kind:"found",user:re,avatar:Ve,match:wr},!0);else O(n,{kind:"not-found",user:re,avatar:Ve},!0)}catch(re){Ee(),O(n,{kind:"error",message:re instanceof Error?re.message:String(re)},!0)}}var p=ia(),d=Je(fe(p),2),c=fe(d);eo(c);var l=Je(c,2),_=fe(l,!0);Q(l),Q(d),Qr(d,(E)=>O(o,E),()=>h(o));var b=Je(d,2),I=fe(b);{var q=(E)=>{var N=ta(),ve=fe(N,!0);Q(N),yt(()=>ut(ve,h(n).message)),ct(E,N)},ye=(E)=>{var N=ra(),ve=fe(N,!0);Q(N),yt(()=>ut(ve,h(n).message)),ct(E,N)},$t=(E)=>{var N=na(),ve=fe(N),Ee=Je(ve,2),Le=fe(Ee),Ue=fe(Le);Q(Le);var re=Je(Le,4),Ve=fe(re);Q(re);var et=Je(re,2),wr=fe(et,!0);Q(et);var tr=Je(et,2);Q(Ee),Q(N),yt((nn,zi)=>{Bt(ve,"src",h(n).avatar),ut(Ue,`${h(n).user.displayName??""} (@${h(n).user.name??""})`),ut(Ve,`Players: ${h(n).match.server.playing??""}/${h(n).match.server.maxPlayers??""}
+            · Ping: ${nn??""}ms`),ut(wr,h(n).match.server.id),Bt(tr,"href",zi)},[()=>Math.round(h(n).match.server.ping),()=>u(h(n).match.server.id)]),ct(E,N)},br=(E)=>{var N=oa(),ve=fe(N),Ee=Je(ve,2),Le=fe(Ee),Ue=fe(Le);Q(Le),or(2),Q(Ee),Q(N),yt(()=>{Bt(ve,"src",h(n).avatar),ut(Ue,`${h(n).user.displayName??""} (@${h(n).user.name??""})`)}),ct(E,N)};Jn(I,(E)=>{if(h(n).kind==="loading")E(q);else if(h(n).kind==="error")E(ye,1);else if(h(n).kind==="found")E($t,2);else if(h(n).kind==="not-found")E(br,3)})}Q(b),Qr(b,(E)=>O(i,E),()=>h(i)),Q(p),yt(()=>{c.disabled=h(s),l.disabled=h(s),ut(_,h(s)?"Searching…":"Search")}),Kr("submit",d,(E)=>{E.preventDefault(),v()}),no(c,()=>h(r),(E)=>O(r,E)),ct(e,p),ar()}var Gi=`
+  .root.svelte-1n46o8q {
+    width: 320px;
+    padding: 14px;
+    font-family:
+      system-ui,
+      -apple-system,
+      sans-serif;
+    color: #f3f4f6;
+    background: #1f2430;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
   }
-}
-function createSignal(value, options) {
-  options = options ? Object.assign({}, signalOptions, options) : signalOptions;
-  const s = {
-    value,
-    observers: null,
-    observerSlots: null,
-    comparator: options.equals || undefined
-  };
-  const setter = value => {
-    if (typeof value === "function") {
-      value = value(s.value);
-    }
-    return writeSignal(s, value);
-  };
-  return [readSignal.bind(s), setter];
-}
-function createRenderEffect(fn, value, options) {
-  const c = createComputation(fn, value, false, STALE);
-  updateComputation(c);
-}
-function createMemo(fn, value, options) {
-  options = options ? Object.assign({}, signalOptions, options) : signalOptions;
-  const c = createComputation(fn, value, true, 0);
-  c.observers = null;
-  c.observerSlots = null;
-  c.comparator = options.equals || undefined;
-  updateComputation(c);
-  return readSignal.bind(c);
-}
-function untrack(fn) {
-  if (Listener === null) return fn();
-  const listener = Listener;
-  Listener = null;
-  try {
-    if (ExternalSourceConfig) ;
-    return fn();
-  } finally {
-    Listener = listener;
+
+  .header.svelte-1n46o8q {
+    font-size: 13px;
+    font-weight: 600;
+    margin-bottom: 12px;
+    color: #cdd3e0;
+    cursor: move;
+    user-select: none;
   }
-}
-function readSignal() {
-  if (this.sources && (this.state)) {
-    if ((this.state) === STALE) updateComputation(this);else {
-      const updates = Updates;
-      Updates = null;
-      runUpdates(() => lookUpstream(this), false);
-      Updates = updates;
-    }
+
+  .form.svelte-1n46o8q {
+    display: flex;
+    gap: 8px;
   }
-  if (Listener) {
-    const observers = this.observers;
-    if (!observers || observers[observers.length - 1] !== Listener) {
-      const sSlot = observers ? observers.length : 0;
-      if (!Listener.sources) {
-        Listener.sources = [this];
-        Listener.sourceSlots = [sSlot];
-      } else {
-        Listener.sources.push(this);
-        Listener.sourceSlots.push(sSlot);
-      }
-      if (!observers) {
-        this.observers = [Listener];
-        this.observerSlots = [Listener.sources.length - 1];
-      } else {
-        observers.push(Listener);
-        this.observerSlots.push(Listener.sources.length - 1);
-      }
-    }
+
+  .input.svelte-1n46o8q {
+    flex: 1;
+    min-width: 0;
+    padding: 8px 10px;
+    border-radius: 8px;
+    border: 1px solid #3a4152;
+    background: #131722;
+    color: #f3f4f6;
+    font-size: 13px;
+    outline: none;
   }
-  return this.value;
-}
-function writeSignal(node, value, isComp) {
-  let current = node.value;
-  if (!node.comparator || !node.comparator(current, value)) {
-    node.value = value;
-    if (node.observers && node.observers.length) {
-      runUpdates(() => {
-        for (let i = 0; i < node.observers.length; i += 1) {
-          const o = node.observers[i];
-          const TransitionRunning = Transition && Transition.running;
-          if (TransitionRunning && Transition.disposed.has(o)) ;
-          if (TransitionRunning ? !o.tState : !o.state) {
-            if (o.pure) Updates.push(o);else Effects.push(o);
-            if (o.observers) markDownstream(o);
-          }
-          if (!TransitionRunning) o.state = STALE;
-        }
-        if (Updates.length > 10e5) {
-          Updates = [];
-          if (IS_DEV) ;
-          throw new Error();
-        }
-      }, false);
-    }
+
+  .input.svelte-1n46o8q:focus {
+    border-color: #335fff;
   }
-  return value;
-}
-function updateComputation(node) {
-  if (!node.fn) return;
-  cleanNode(node);
-  const time = ExecCount;
-  runComputation(node, node.value, time);
-}
-function runComputation(node, value, time) {
-  let nextValue;
-  const owner = Owner,
-    listener = Listener;
-  Listener = Owner = node;
-  try {
-    nextValue = node.fn(value);
-  } catch (err) {
-    if (node.pure) {
-      {
-        node.state = STALE;
-        node.owned && node.owned.forEach(cleanNode);
-        node.owned = null;
-      }
-    }
-    node.updatedAt = time + 1;
-    return handleError(err);
-  } finally {
-    Listener = listener;
-    Owner = owner;
+
+  .button.svelte-1n46o8q {
+    padding: 8px 14px;
+    border-radius: 8px;
+    border: none;
+    background: #335fff;
+    color: #fff;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
   }
-  if (!node.updatedAt || node.updatedAt <= time) {
-    if (node.updatedAt != null && "observers" in node) {
-      writeSignal(node, nextValue);
-    } else node.value = nextValue;
-    node.updatedAt = time;
+
+  .button.svelte-1n46o8q:disabled {
+    opacity: 0.6;
+    cursor: default;
   }
-}
-function createComputation(fn, init, pure, state = STALE, options) {
-  const c = {
-    fn,
-    state: state,
-    updatedAt: null,
-    owned: null,
-    sources: null,
-    sourceSlots: null,
-    cleanups: null,
-    value: init,
-    owner: Owner,
-    context: Owner ? Owner.context : null,
-    pure
-  };
-  if (Owner === null) ;else if (Owner !== UNOWNED) {
-    {
-      if (!Owner.owned) Owner.owned = [c];else Owner.owned.push(c);
-    }
+
+  .result.svelte-1n46o8q {
+    margin-top: 12px;
+    min-height: 8px;
   }
-  return c;
-}
-function runTop(node) {
-  if ((node.state) === 0) return;
-  if ((node.state) === PENDING) return lookUpstream(node);
-  if (node.suspense && untrack(node.suspense.inFallback)) return node.suspense.effects.push(node);
-  const ancestors = [node];
-  while ((node = node.owner) && (!node.updatedAt || node.updatedAt < ExecCount)) {
-    if (node.state) ancestors.push(node);
+
+  .loading.svelte-1n46o8q {
+    font-size: 13px;
+    color: #9aa4bd;
   }
-  for (let i = ancestors.length - 1; i >= 0; i--) {
-    node = ancestors[i];
-    if ((node.state) === STALE) {
-      updateComputation(node);
-    } else if ((node.state) === PENDING) {
-      const updates = Updates;
-      Updates = null;
-      runUpdates(() => lookUpstream(node, ancestors[0]), false);
-      Updates = updates;
-    }
+
+  .error.svelte-1n46o8q {
+    font-size: 13px;
+    color: #ff6b6b;
   }
-}
-function runUpdates(fn, init) {
-  if (Updates) return fn();
-  let wait = false;
-  if (!init) Updates = [];
-  if (Effects) wait = true;else Effects = [];
-  ExecCount++;
-  try {
-    const res = fn();
-    completeUpdates(wait);
-    return res;
-  } catch (err) {
-    if (!wait) Effects = null;
-    Updates = null;
-    handleError(err);
+
+  .card.svelte-1n46o8q {
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
   }
-}
-function completeUpdates(wait) {
-  if (Updates) {
-    runQueue(Updates);
-    Updates = null;
+
+  .avatar.svelte-1n46o8q {
+    width: 56px;
+    height: 56px;
+    border-radius: 8px;
+    background: #131722;
+    flex-shrink: 0;
   }
-  if (wait) return;
-  const e = Effects;
-  Effects = null;
-  if (e.length) runUpdates(() => runEffects(e), false);
-}
-function runQueue(queue) {
-  for (let i = 0; i < queue.length; i++) runTop(queue[i]);
-}
-function lookUpstream(node, ignore) {
-  node.state = 0;
-  for (let i = 0; i < node.sources.length; i += 1) {
-    const source = node.sources[i];
-    if (source.sources) {
-      const state = source.state;
-      if (state === STALE) {
-        if (source !== ignore && (!source.updatedAt || source.updatedAt < ExecCount)) runTop(source);
-      } else if (state === PENDING) lookUpstream(source, ignore);
-    }
+
+  .info.svelte-1n46o8q {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    min-width: 0;
   }
-}
-function markDownstream(node) {
-  for (let i = 0; i < node.observers.length; i += 1) {
-    const o = node.observers[i];
-    if (!o.state) {
-      o.state = PENDING;
-      if (o.pure) Updates.push(o);else Effects.push(o);
-      o.observers && markDownstream(o);
-    }
+
+  .name.svelte-1n46o8q {
+    font-size: 13px;
+    font-weight: 600;
   }
-}
-function cleanNode(node) {
-  let i;
-  if (node.sources) {
-    while (node.sources.length) {
-      const source = node.sources.pop(),
-        index = node.sourceSlots.pop(),
-        obs = source.observers;
-      if (obs && obs.length) {
-        const n = obs.pop(),
-          s = source.observerSlots.pop();
-        if (index < obs.length) {
-          n.sourceSlots[s] = index;
-          obs[index] = n;
-          source.observerSlots[index] = s;
-        }
-      }
-    }
+
+  .found.svelte-1n46o8q {
+    font-size: 13px;
+    color: #4ade80;
+    font-weight: 600;
   }
-  if (node.tOwned) {
-    for (i = node.tOwned.length - 1; i >= 0; i--) cleanNode(node.tOwned[i]);
-    delete node.tOwned;
+
+  .notFound.svelte-1n46o8q {
+    font-size: 13px;
+    color: #ff6b6b;
   }
-  if (node.owned) {
-    for (i = node.owned.length - 1; i >= 0; i--) cleanNode(node.owned[i]);
-    node.owned = null;
+
+  .meta.svelte-1n46o8q {
+    font-size: 12px;
+    color: #9aa4bd;
   }
-  if (node.cleanups) {
-    for (i = node.cleanups.length - 1; i >= 0; i--) node.cleanups[i]();
-    node.cleanups = null;
+
+  .serverId.svelte-1n46o8q {
+    font-size: 11px;
+    color: #6b7280;
+    word-break: break-all;
   }
-  node.state = 0;
-}
-function castError(err) {
-  if (err instanceof Error) return err;
-  return new Error(typeof err === "string" ? err : "Unknown error", {
-    cause: err
-  });
-}
-function handleError(err, owner = Owner) {
-  const error = castError(err);
-  throw error;
-}
-function createComponent(Comp, props) {
-  return untrack(() => Comp(props || {}));
-}
 
-const narrowedError = name => `Stale read from <${name}>.`;
-function Show(props) {
-  const keyed = props.keyed;
-  const conditionValue = createMemo(() => props.when, undefined, undefined);
-  const condition = keyed ? conditionValue : createMemo(conditionValue, undefined, {
-    equals: (a, b) => !a === !b
-  });
-  return createMemo(() => {
-    const c = condition();
-    if (c) {
-      const child = props.children;
-      const fn = typeof child === "function" && child.length > 0;
-      return fn ? untrack(() => child(keyed ? c : () => {
-        if (!untrack(condition)) throw narrowedError("Show");
-        return conditionValue();
-      })) : child;
-    }
-    return props.fallback;
-  }, undefined, undefined);
-}
-
-function reconcileArrays(parentNode, a, b) {
-  let bLength = b.length,
-    aEnd = a.length,
-    bEnd = bLength,
-    aStart = 0,
-    bStart = 0,
-    after = a[aEnd - 1].nextSibling,
-    map = null;
-  while (aStart < aEnd || bStart < bEnd) {
-    if (a[aStart] === b[bStart]) {
-      aStart++;
-      bStart++;
-      continue;
-    }
-    while (a[aEnd - 1] === b[bEnd - 1]) {
-      aEnd--;
-      bEnd--;
-    }
-    if (aEnd === aStart) {
-      const node = bEnd < bLength ? bStart ? b[bStart - 1].nextSibling : b[bEnd - bStart] : after;
-      while (bStart < bEnd) parentNode.insertBefore(b[bStart++], node);
-    } else if (bEnd === bStart) {
-      while (aStart < aEnd) {
-        if (!map || !map.has(a[aStart])) a[aStart].remove();
-        aStart++;
-      }
-    } else if (a[aStart] === b[bEnd - 1] && b[bStart] === a[aEnd - 1]) {
-      const node = a[--aEnd].nextSibling;
-      parentNode.insertBefore(b[bStart++], a[aStart++].nextSibling);
-      parentNode.insertBefore(b[--bEnd], node);
-      a[aEnd] = b[bEnd];
-    } else {
-      if (!map) {
-        map = new Map();
-        let i = bStart;
-        while (i < bEnd) map.set(b[i], i++);
-      }
-      const index = map.get(a[aStart]);
-      if (index != null) {
-        if (bStart < index && index < bEnd) {
-          let i = aStart,
-            sequence = 1,
-            t;
-          while (++i < aEnd && i < bEnd) {
-            if ((t = map.get(a[i])) == null || t !== index + sequence) break;
-            sequence++;
-          }
-          if (sequence > index - bStart) {
-            const node = a[aStart];
-            while (bStart < index) parentNode.insertBefore(b[bStart++], node);
-          } else parentNode.replaceChild(b[bStart++], a[aStart++]);
-        } else aStart++;
-      } else a[aStart++].remove();
-    }
+  .join.svelte-1n46o8q {
+    margin-top: 4px;
+    font-size: 12px;
+    color: #7aa2ff;
+    text-decoration: none;
   }
-}
 
-const $$EVENTS = "_$DX_DELEGATE";
-function render(code, element, init, options = {}) {
-  let disposer;
-  createRoot(dispose => {
-    disposer = dispose;
-    element === document ? code() : insert(element, code(), element.firstChild ? null : undefined, init);
-  }, options.owner);
-  return () => {
-    disposer();
-    element.textContent = "";
-  };
-}
-function template(html, isImportNode, isSVG, isMathML) {
-  let node;
-  const create = () => {
-    const t = document.createElement("template");
-    t.innerHTML = html;
-    return t.content.firstChild;
-  };
-  const fn = () => (node || (node = create())).cloneNode(true);
-  fn.cloneNode = fn;
-  return fn;
-}
-function delegateEvents(eventNames, document = window.document) {
-  const e = document[$$EVENTS] || (document[$$EVENTS] = new Set());
-  for (let i = 0, l = eventNames.length; i < l; i++) {
-    const name = eventNames[i];
-    if (!e.has(name)) {
-      e.add(name);
-      document.addEventListener(name, eventHandler);
-    }
+  .join.svelte-1n46o8q:hover {
+    text-decoration: underline;
   }
-}
-function setAttribute(node, name, value) {
-  if (value == null) node.removeAttribute(name);else node.setAttribute(name, value);
-}
-function className(node, value) {
-  if (value == null) node.removeAttribute("class");else node.className = value;
-}
-function use(fn, element, arg) {
-  return untrack(() => fn(element, arg));
-}
-function insert(parent, accessor, marker, initial) {
-  if (marker !== undefined && !initial) initial = [];
-  if (typeof accessor !== "function") return insertExpression(parent, accessor, initial, marker);
-  createRenderEffect(current => insertExpression(parent, accessor(), current, marker), initial);
-}
-function eventHandler(e) {
-  let node = e.target;
-  const key = `$$${e.type}`;
-  const oriTarget = e.target;
-  const oriCurrentTarget = e.currentTarget;
-  const retarget = value => Object.defineProperty(e, "target", {
-    configurable: true,
-    value
-  });
-  const handleNode = () => {
-    const handler = node[key];
-    if (handler && !node.disabled) {
-      const data = node[`${key}Data`];
-      data !== undefined ? handler.call(node, data, e) : handler.call(node, e);
-      if (e.cancelBubble) return;
-    }
-    node.host && typeof node.host !== "string" && !node.host._$host && node.contains(e.target) && retarget(node.host);
-    return true;
-  };
-  const walkUpTree = () => {
-    while (handleNode() && (node = node._$host || node.parentNode || node.host));
-  };
-  Object.defineProperty(e, "currentTarget", {
-    configurable: true,
-    get() {
-      return node || document;
-    }
-  });
-  if (e.composedPath) {
-    const path = e.composedPath();
-    retarget(path[0]);
-    for (let i = 0; i < path.length - 2; i++) {
-      node = path[i];
-      if (!handleNode()) break;
-      if (node._$host) {
-        node = node._$host;
-        walkUpTree();
-        break;
-      }
-      if (node.parentNode === oriCurrentTarget) {
-        break;
-      }
-    }
-  }
-  else walkUpTree();
-  retarget(oriTarget);
-}
-function insertExpression(parent, value, current, marker, unwrapArray) {
-  while (typeof current === "function") current = current();
-  if (value === current) return current;
-  const t = typeof value,
-    multi = marker !== undefined;
-  parent = multi && current[0] && current[0].parentNode || parent;
-  if (t === "string" || t === "number") {
-    if (t === "number") {
-      value = value.toString();
-      if (value === current) return current;
-    }
-    if (multi) {
-      let node = current[0];
-      if (node && node.nodeType === 3) {
-        node.data !== value && (node.data = value);
-      } else node = document.createTextNode(value);
-      current = cleanChildren(parent, current, marker, node);
-    } else {
-      if (current !== "" && typeof current === "string") {
-        current = parent.firstChild.data = value;
-      } else current = parent.textContent = value;
-    }
-  } else if (value == null || t === "boolean") {
-    current = cleanChildren(parent, current, marker);
-  } else if (t === "function") {
-    createRenderEffect(() => {
-      let v = value();
-      while (typeof v === "function") v = v();
-      current = insertExpression(parent, v, current, marker);
-    });
-    return () => current;
-  } else if (Array.isArray(value)) {
-    const array = [];
-    const currentArray = current && Array.isArray(current);
-    if (normalizeIncomingArray(array, value, current, unwrapArray)) {
-      createRenderEffect(() => current = insertExpression(parent, array, current, marker, true));
-      return () => current;
-    }
-    if (array.length === 0) {
-      current = cleanChildren(parent, current, marker);
-      if (multi) return current;
-    } else if (currentArray) {
-      if (current.length === 0) {
-        appendNodes(parent, array, marker);
-      } else reconcileArrays(parent, current, array);
-    } else {
-      current && cleanChildren(parent);
-      appendNodes(parent, array);
-    }
-    current = array;
-  } else if (value.nodeType) {
-    if (Array.isArray(current)) {
-      if (multi) return current = cleanChildren(parent, current, marker, value);
-      cleanChildren(parent, current, null, value);
-    } else if (current == null || current === "" || !parent.firstChild) {
-      parent.appendChild(value);
-    } else parent.replaceChild(value, parent.firstChild);
-    current = value;
-  } else ;
-  return current;
-}
-function normalizeIncomingArray(normalized, array, current, unwrap) {
-  let dynamic = false;
-  for (let i = 0, len = array.length; i < len; i++) {
-    let item = array[i],
-      prev = current && current[normalized.length],
-      t;
-    if (item == null || item === true || item === false) ; else if ((t = typeof item) === "object" && item.nodeType) {
-      normalized.push(item);
-    } else if (Array.isArray(item)) {
-      dynamic = normalizeIncomingArray(normalized, item, prev) || dynamic;
-    } else if (t === "function") {
-      if (unwrap) {
-        while (typeof item === "function") item = item();
-        dynamic = normalizeIncomingArray(normalized, Array.isArray(item) ? item : [item], Array.isArray(prev) ? prev : [prev]) || dynamic;
-      } else {
-        normalized.push(item);
-        dynamic = true;
-      }
-    } else {
-      const value = String(item);
-      if (prev && prev.nodeType === 3 && prev.data === value) normalized.push(prev);else normalized.push(document.createTextNode(value));
-    }
-  }
-  return dynamic;
-}
-function appendNodes(parent, array, marker = null) {
-  for (let i = 0, len = array.length; i < len; i++) parent.insertBefore(array[i], marker);
-}
-function cleanChildren(parent, current, marker, replacement) {
-  if (marker === undefined) return parent.textContent = "";
-  const node = replacement || document.createTextNode("");
-  if (current.length) {
-    let inserted = false;
-    for (let i = current.length - 1; i >= 0; i--) {
-      const el = current[i];
-      if (node !== el) {
-        const isParent = el.parentNode === parent;
-        if (!inserted && !i) isParent ? parent.replaceChild(node, el) : parent.insertBefore(node, marker);else isParent && el.remove();
-      } else inserted = true;
-    }
-  } else parent.insertBefore(node, marker);
-  return [node];
-}
-
-var css_248z = "";
-
-var styles = {"root":"style-module_root__d9Kr2","header":"style-module_header__TLWM-","form":"style-module_form__n4UNZ","input":"style-module_input__rPbzC","button":"style-module_button__EkTwi","result":"style-module_result__1O8zN","loading":"style-module_loading__o2iw7","error":"style-module_error__6a308","card":"style-module_card__G0TgL","avatar":"style-module_avatar__VTE1k","info":"style-module_info__pWvNx","name":"style-module_name__SL3bM","found":"style-module_found__3KKGq","notFound":"style-module_notFound__FIGwt","meta":"style-module_meta__E9-B9","serverId":"style-module_serverId__GUEj6","join":"style-module_join__vAPfA"};
-var stylesheet="*,:after,:before{--un-rotate:0;--un-rotate-x:0;--un-rotate-y:0;--un-rotate-z:0;--un-scale-x:1;--un-scale-y:1;--un-scale-z:1;--un-skew-x:0;--un-skew-y:0;--un-translate-x:0;--un-translate-y:0;--un-translate-z:0;--un-pan-x: ;--un-pan-y: ;--un-pinch-zoom: ;--un-scroll-snap-strictness:proximity;--un-ordinal: ;--un-slashed-zero: ;--un-numeric-figure: ;--un-numeric-spacing: ;--un-numeric-fraction: ;--un-border-spacing-x:0;--un-border-spacing-y:0;--un-ring-offset-shadow:0 0 transparent;--un-ring-shadow:0 0 transparent;--un-shadow-inset: ;--un-shadow:0 0 transparent;--un-ring-inset: ;--un-ring-offset-width:0px;--un-ring-offset-color:#fff;--un-ring-width:0px;--un-ring-color:rgba(147,197,253,.5);--un-blur: ;--un-brightness: ;--un-contrast: ;--un-drop-shadow: ;--un-grayscale: ;--un-hue-rotate: ;--un-invert: ;--un-saturate: ;--un-sepia: ;--un-backdrop-blur: ;--un-backdrop-brightness: ;--un-backdrop-contrast: ;--un-backdrop-grayscale: ;--un-backdrop-hue-rotate: ;--un-backdrop-invert: ;--un-backdrop-opacity: ;--un-backdrop-saturate: ;--un-backdrop-sepia: }::backdrop{--un-rotate:0;--un-rotate-x:0;--un-rotate-y:0;--un-rotate-z:0;--un-scale-x:1;--un-scale-y:1;--un-scale-z:1;--un-skew-x:0;--un-skew-y:0;--un-translate-x:0;--un-translate-y:0;--un-translate-z:0;--un-pan-x: ;--un-pan-y: ;--un-pinch-zoom: ;--un-scroll-snap-strictness:proximity;--un-ordinal: ;--un-slashed-zero: ;--un-numeric-figure: ;--un-numeric-spacing: ;--un-numeric-fraction: ;--un-border-spacing-x:0;--un-border-spacing-y:0;--un-ring-offset-shadow:0 0 transparent;--un-ring-shadow:0 0 transparent;--un-shadow-inset: ;--un-shadow:0 0 transparent;--un-ring-inset: ;--un-ring-offset-width:0px;--un-ring-offset-color:#fff;--un-ring-width:0px;--un-ring-color:rgba(147,197,253,.5);--un-blur: ;--un-brightness: ;--un-contrast: ;--un-drop-shadow: ;--un-grayscale: ;--un-hue-rotate: ;--un-invert: ;--un-saturate: ;--un-sepia: ;--un-backdrop-blur: ;--un-backdrop-brightness: ;--un-backdrop-contrast: ;--un-backdrop-grayscale: ;--un-backdrop-hue-rotate: ;--un-backdrop-invert: ;--un-backdrop-opacity: ;--un-backdrop-saturate: ;--un-backdrop-sepia: }.style-module_root__d9Kr2{background:#1f2430;border-radius:12px;box-shadow:0 10px 30px rgba(0,0,0,.4);color:#f3f4f6;font-family:system-ui,-apple-system,sans-serif;padding:14px;width:320px}.style-module_header__TLWM-{color:#cdd3e0;cursor:move;font-size:13px;font-weight:600;margin-bottom:12px;user-select:none}.style-module_form__n4UNZ{display:flex;gap:8px}.style-module_input__rPbzC{background:#131722;border:1px solid #3a4152;border-radius:8px;color:#f3f4f6;flex:1;font-size:13px;min-width:0;outline:none;padding:8px 10px}.style-module_input__rPbzC:focus{border-color:#335fff}.style-module_button__EkTwi{background:#335fff;border:none;border-radius:8px;color:#fff;cursor:pointer;font-size:13px;font-weight:600;padding:8px 14px}.style-module_button__EkTwi:disabled{cursor:default;opacity:.6}.style-module_result__1O8zN{margin-top:12px;min-height:8px}.style-module_loading__o2iw7{color:#9aa4bd;font-size:13px}.style-module_error__6a308{color:#ff6b6b;font-size:13px}.style-module_card__G0TgL{align-items:flex-start;display:flex;gap:12px}.style-module_avatar__VTE1k{background:#131722;border-radius:8px;flex-shrink:0;height:56px;width:56px}.style-module_info__pWvNx{display:flex;flex-direction:column;gap:3px;min-width:0}.style-module_found__3KKGq,.style-module_name__SL3bM{font-size:13px;font-weight:600}.style-module_found__3KKGq{color:#4ade80}.style-module_notFound__FIGwt{color:#ff6b6b;font-size:13px}.style-module_meta__E9-B9{color:#9aa4bd;font-size:12px}.style-module_serverId__GUEj6{color:#6b7280;font-size:11px;word-break:break-all}.style-module_join__vAPfA{color:#7aa2ff;font-size:12px;margin-top:4px;text-decoration:none}.style-module_join__vAPfA:hover{text-decoration:underline}";
-
-function _extends() {
-  return _extends = Object.assign ? Object.assign.bind() : function (n) {
-    for (var e = 1; e < arguments.length; e++) {
-      var t = arguments[e];
-      for (var r in t) ({}).hasOwnProperty.call(t, r) && (n[r] = t[r]);
-    }
-    return n;
-  }, _extends.apply(null, arguments);
-}
-
-// Roblox Web API helpers implementing the flow described in info.txt:
-// 1. Resolve a username to a user id.
-// 2. Fetch that user's avatar headshot (to compare against server players).
-// 3. Page through the game's public servers, collecting player tokens.
-// 4. Batch-resolve the player tokens to avatar headshots.
-// 5. Match the target user's headshot against the servers' headshots.
-
-//asasas
-
-const COMMON_HEADERS = {
-  accept: '*/*',
-  'accept-language': 'en-GB,en;q=0.9'
-};
-
-/** How long to wait before retrying after a 429 (Too Many Requests). */
-const RETRY_DELAY_MS = 10000;
-/** Maximum number of retries before giving up on a rate-limited request. */
-const MAX_RETRIES = 10;
-
-/** Called when a request is rate limited, so callers can surface a message. */
-
-function delay(ms) {
-  return new Promise(resolve => setTimeout(resolve, ms));
-}
-
-/**
- * Like `fetch`, but when the response is a 429 it waits (respecting the
- * `Retry-After` header when present, otherwise 10 seconds) and retries.
- */
-async function fetchWithRetry(input, init, onRateLimit) {
-  let attempt = 0;
-  for (;;) {
-    const res = await fetch(input, init);
-    if (res.status !== 429 || attempt >= MAX_RETRIES) return res;
-    attempt += 1;
-    const retryAfter = Number(res.headers.get('retry-after'));
-    const waitMs = Number.isFinite(retryAfter) && retryAfter > 0 ? Math.max(retryAfter * 1000, RETRY_DELAY_MS) : RETRY_DELAY_MS;
-    onRateLimit == null || onRateLimit({
-      attempt,
-      waitMs
-    });
-    await delay(waitMs);
-  }
-}
-
-/**
- * The headshot cdn url embeds a content hash that is stable for a given
- * rendered avatar. We compare on that hash so the target lookup and the batch
- * lookup only need to agree on the render parameters (size/format/filter).
- */
-function headshotHash(imageUrl) {
-  const match = imageUrl.match(/AvatarHeadshot-([A-Fa-f0-9]+)/);
-  return match ? match[1].toUpperCase() : imageUrl;
-}
-
-/** Resolve a username to its Roblox user record. Returns null if not found. */
-async function resolveUsername(username, onRateLimit) {
-  var _json$data$, _json$data;
-  const res = await fetchWithRetry('https://users.roblox.com/v1/usernames/users', {
-    headers: _extends({}, COMMON_HEADERS, {
-      'content-type': 'application/json'
-    }),
-    referrer: 'https://www.roblox.com/',
-    body: JSON.stringify({
-      usernames: [username],
-      excludeBannedUsers: true
-    }),
-    method: 'POST',
-    mode: 'cors',
-    credentials: 'omit'
-  }, onRateLimit);
-  if (!res.ok) throw new Error(`Username lookup failed (${res.status})`);
-  const json = await res.json();
-  return (_json$data$ = (_json$data = json.data) == null ? void 0 : _json$data[0]) != null ? _json$data$ : null;
-}
-
-/**
- * Fetch a user's avatar headshot url. `isCircular` is kept false so the render
- * parameters match the batch lookup used for server players.
- */
-async function getUserHeadshot(userId, onRateLimit) {
-  var _json$data$0$imageUrl, _json$data2;
-  const res = await fetchWithRetry(`https://thumbnails.roblox.com/v1/users/avatar-headshot?userIds=${userId}&size=150x150&format=Png&isCircular=false`, {
-    headers: COMMON_HEADERS,
-    referrer: 'https://www.roblox.com/',
-    method: 'GET',
-    mode: 'cors',
-    credentials: 'include'
-  }, onRateLimit);
-  if (!res.ok) throw new Error(`Avatar lookup failed (${res.status})`);
-  const json = await res.json();
-  return (_json$data$0$imageUrl = (_json$data2 = json.data) == null || (_json$data2 = _json$data2[0]) == null ? void 0 : _json$data2.imageUrl) != null ? _json$data$0$imageUrl : null;
-}
-
-/** Page through every public server of a game. */
-async function getPublicServers(placeId, onProgress, onRateLimit) {
-  const servers = [];
-  let cursor = '';
-  do {
-    var _json$data3, _json$nextPageCursor;
-    const res = await fetchWithRetry(`https://games.roblox.com/v1/games/${placeId}/servers/Public?limit=100&cursor=${cursor}`, {
-      headers: COMMON_HEADERS,
-      referrer: 'https://www.roblox.com/',
-      method: 'GET',
-      mode: 'cors',
-      credentials: 'include'
-    }, onRateLimit);
-    if (!res.ok) throw new Error(`Server list failed (${res.status})`);
-    const json = await res.json();
-    servers.push(...((_json$data3 = json.data) != null ? _json$data3 : []));
-    onProgress == null || onProgress(servers.length);
-    cursor = (_json$nextPageCursor = json.nextPageCursor) != null ? _json$nextPageCursor : '';
-  } while (cursor);
-  return servers;
-}
-async function fetchHeadshotBatch(items, onRateLimit) {
-  var _json$data4;
-  const res = await fetchWithRetry('https://thumbnails.roblox.com/v1/batch', {
-    headers: _extends({}, COMMON_HEADERS, {
-      'content-type': 'application/json'
-    }),
-    referrer: 'https://www.roblox.com/',
-    body: JSON.stringify(items),
-    method: 'POST',
-    mode: 'cors',
-    credentials: 'omit'
-  }, onRateLimit);
-  if (!res.ok) throw new Error(`Batch thumbnail failed (${res.status})`);
-  const json = await res.json();
-  return (_json$data4 = json.data) != null ? _json$data4 : [];
-}
-
-/**
- * Search the given servers for the target user's headshot.
- * Returns the first server whose player list contains a matching headshot.
- */
-async function findUserInServers(servers, targetImageUrl, onProgress, onRateLimit) {
-  const targetHash = headshotHash(targetImageUrl);
-
-  // Build a unique requestId per token so we can map each result back to the
-  // server it belongs to, regardless of response ordering.
-  const tokenToServer = new Map();
-  const items = [];
-  servers.forEach((server, si) => {
-    server.playerTokens.forEach((token, ti) => {
-      const requestId = `${si}:${ti}`;
-      tokenToServer.set(requestId, server);
-      items.push({
-        token,
-        type: 'AvatarHeadshot',
-        size: '150x150',
-        requestId
-      });
-    });
-  });
-  const CHUNK = 100;
-  const total = items.length;
-  let done = 0;
-  for (let i = 0; i < items.length; i += CHUNK) {
-    const chunk = items.slice(i, i + CHUNK);
-    const results = await fetchHeadshotBatch(chunk, onRateLimit);
-    for (const result of results) {
-      if (!result.imageUrl) continue;
-      if (headshotHash(result.imageUrl) === targetHash) {
-        const server = tokenToServer.get(result.requestId);
-        if (server) return {
-          server,
-          imageUrl: result.imageUrl
-        };
-      }
-    }
-    done += chunk.length;
-    onProgress == null || onProgress(done, total);
-  }
-  return null;
-}
-
-/** Extract the numeric place id from a /games/<id>/... url. */
-function getPlaceIdFromUrl(url) {
-  const match = url.match(/\/games\/(\d+)/);
-  return match ? match[1] : null;
-}
-
-var _tmpl$ = /*#__PURE__*/template(`<div>`),
-  _tmpl$2 = /*#__PURE__*/template(`<div><div>rogrep — find a user in a server</div><form><input type=text placeholder="Roblox username"><button type=submit></button></form><div>`),
-  _tmpl$3 = /*#__PURE__*/template(`<div><img alt><div><div> (@<!>)</div><div>Found in a server ✓</div><div>Players: <!>/<!> · Ping: <!>ms</div><div></div><a target=_blank rel=noreferrer>Join server`),
-  _tmpl$4 = /*#__PURE__*/template(`<div><img alt><div><div> (@<!>)</div><div>Not found in any public server.`);
-function Rogrep() {
-  const [username, setUsername] = createSignal('');
-  const [status, setStatus] = createSignal({
-    kind: 'idle'
-  });
-  const busy = () => status().kind === 'loading';
-
-  // Attach a direct (non-delegated) mousedown listener so it fires during
-  // native bubbling and stops the panel's drag handler from calling
-  // preventDefault, which would otherwise block focusing the input.
-  const stopDrag = el => {
-    el.addEventListener('mousedown', e => e.stopPropagation());
-  };
-  const search = async () => {
-    const name = username().trim();
-    if (!name) {
-      ui.showToast('Enter a username first', {
-        theme: 'dark'
-      });
-      return;
-    }
-    const placeId = getPlaceIdFromUrl(location.href);
-    if (!placeId) {
-      setStatus({
-        kind: 'error',
-        message: 'Could not detect a game id in the URL.'
-      });
-      return;
-    }
-
-    // Shows a live countdown while a rate-limited request waits to retry.
-    let countdownTimer;
-    const clearCountdown = () => {
-      if (countdownTimer) {
-        clearInterval(countdownTimer);
-        countdownTimer = undefined;
-      }
-    };
-    const onRateLimit = ({
-      waitMs
-    }) => {
-      clearCountdown();
-      let remaining = Math.ceil(waitMs / 1000);
-      const show = () => setStatus({
-        kind: 'loading',
-        message: `Rate limited (429) — retrying in ${remaining}s…`
-      });
-      show();
-      countdownTimer = setInterval(() => {
-        remaining -= 1;
-        if (remaining <= 0) {
-          clearCountdown();
-          return;
-        }
-        show();
-      }, 1000);
-    };
-    // Wrap progress callbacks so they cancel any active countdown.
-    const progress = status => {
-      clearCountdown();
-      setStatus(status);
-    };
-    try {
-      progress({
-        kind: 'loading',
-        message: `Looking up "${name}"…`
-      });
-      const user = await resolveUsername(name, onRateLimit);
-      if (!user) {
-        clearCountdown();
-        setStatus({
-          kind: 'error',
-          message: `No user found named "${name}".`
-        });
-        return;
-      }
-      progress({
-        kind: 'loading',
-        message: 'Fetching avatar…'
-      });
-      const avatar = await getUserHeadshot(user.id, onRateLimit);
-      if (!avatar) {
-        clearCountdown();
-        setStatus({
-          kind: 'error',
-          message: 'Could not load the user avatar.'
-        });
-        return;
-      }
-      progress({
-        kind: 'loading',
-        message: 'Loading servers…'
-      });
-      const servers = await getPublicServers(placeId, count => {
-        progress({
-          kind: 'loading',
-          message: `Loading servers… (${count})`
-        });
-      }, onRateLimit);
-      progress({
-        kind: 'loading',
-        message: `Scanning ${servers.length} servers…`
-      });
-      const match = await findUserInServers(servers, avatar, (done, total) => {
-        progress({
-          kind: 'loading',
-          message: `Scanning players… (${done}/${total})`
-        });
-      }, onRateLimit);
-      clearCountdown();
-      if (match) {
-        setStatus({
-          kind: 'found',
-          user,
-          avatar,
-          match
-        });
-      } else {
-        setStatus({
-          kind: 'not-found',
-          user,
-          avatar
-        });
-      }
-    } catch (err) {
-      clearCountdown();
-      setStatus({
-        kind: 'error',
-        message: err instanceof Error ? err.message : String(err)
-      });
-    }
-  };
-  const joinUrl = serverId => {
-    const placeId = getPlaceIdFromUrl(location.href);
-    return `https://www.roblox.com/games/start?placeId=${placeId}&gameInstanceId=${serverId}`;
-  };
-  return (() => {
-    var _el$ = _tmpl$2(),
-      _el$2 = _el$.firstChild,
-      _el$3 = _el$2.nextSibling,
-      _el$4 = _el$3.firstChild,
-      _el$5 = _el$4.nextSibling,
-      _el$6 = _el$3.nextSibling;
-    _el$3.addEventListener("submit", e => {
-      e.preventDefault();
-      search();
-    });
-    use(stopDrag, _el$3);
-    _el$4.$$input = e => setUsername(e.currentTarget.value);
-    insert(_el$5, () => busy() ? 'Searching…' : 'Search');
-    use(stopDrag, _el$6);
-    insert(_el$6, createComponent(Show, {
-      get when() {
-        return status().kind === 'loading';
-      },
-      get children() {
-        var _el$7 = _tmpl$();
-        insert(_el$7, () => status().message);
-        createRenderEffect(() => className(_el$7, styles.loading));
-        return _el$7;
-      }
-    }), null);
-    insert(_el$6, createComponent(Show, {
-      get when() {
-        return status().kind === 'error';
-      },
-      get children() {
-        var _el$8 = _tmpl$();
-        insert(_el$8, () => status().message);
-        createRenderEffect(() => className(_el$8, styles.error));
-        return _el$8;
-      }
-    }), null);
-    insert(_el$6, createComponent(Show, {
-      get when() {
-        return status().kind === 'found';
-      },
-      get children() {
-        return (() => {
-          const s = status();
-          return (() => {
-            var _el$9 = _tmpl$3(),
-              _el$0 = _el$9.firstChild,
-              _el$1 = _el$0.nextSibling,
-              _el$10 = _el$1.firstChild,
-              _el$11 = _el$10.firstChild,
-              _el$13 = _el$11.nextSibling;
-              _el$13.nextSibling;
-              var _el$14 = _el$10.nextSibling,
-              _el$15 = _el$14.nextSibling,
-              _el$16 = _el$15.firstChild,
-              _el$21 = _el$16.nextSibling,
-              _el$17 = _el$21.nextSibling,
-              _el$22 = _el$17.nextSibling,
-              _el$18 = _el$22.nextSibling,
-              _el$23 = _el$18.nextSibling;
-              _el$23.nextSibling;
-              var _el$24 = _el$15.nextSibling,
-              _el$25 = _el$24.nextSibling;
-            insert(_el$10, () => s.user.displayName, _el$11);
-            insert(_el$10, () => s.user.name, _el$13);
-            insert(_el$15, () => s.match.server.playing, _el$21);
-            insert(_el$15, () => s.match.server.maxPlayers, _el$22);
-            insert(_el$15, () => Math.round(s.match.server.ping), _el$23);
-            insert(_el$24, () => s.match.server.id);
-            createRenderEffect(_p$ => {
-              var _v$9 = styles.card,
-                _v$0 = styles.avatar,
-                _v$1 = s.avatar,
-                _v$10 = styles.info,
-                _v$11 = styles.name,
-                _v$12 = styles.found,
-                _v$13 = styles.meta,
-                _v$14 = styles.serverId,
-                _v$15 = styles.join,
-                _v$16 = joinUrl(s.match.server.id);
-              _v$9 !== _p$.e && className(_el$9, _p$.e = _v$9);
-              _v$0 !== _p$.t && className(_el$0, _p$.t = _v$0);
-              _v$1 !== _p$.a && setAttribute(_el$0, "src", _p$.a = _v$1);
-              _v$10 !== _p$.o && className(_el$1, _p$.o = _v$10);
-              _v$11 !== _p$.i && className(_el$10, _p$.i = _v$11);
-              _v$12 !== _p$.n && className(_el$14, _p$.n = _v$12);
-              _v$13 !== _p$.s && className(_el$15, _p$.s = _v$13);
-              _v$14 !== _p$.h && className(_el$24, _p$.h = _v$14);
-              _v$15 !== _p$.r && className(_el$25, _p$.r = _v$15);
-              _v$16 !== _p$.d && setAttribute(_el$25, "href", _p$.d = _v$16);
-              return _p$;
-            }, {
-              e: undefined,
-              t: undefined,
-              a: undefined,
-              o: undefined,
-              i: undefined,
-              n: undefined,
-              s: undefined,
-              h: undefined,
-              r: undefined,
-              d: undefined
-            });
-            return _el$9;
-          })();
-        })();
-      }
-    }), null);
-    insert(_el$6, createComponent(Show, {
-      get when() {
-        return status().kind === 'not-found';
-      },
-      get children() {
-        return (() => {
-          const s = status();
-          return (() => {
-            var _el$26 = _tmpl$4(),
-              _el$27 = _el$26.firstChild,
-              _el$28 = _el$27.nextSibling,
-              _el$29 = _el$28.firstChild,
-              _el$30 = _el$29.firstChild,
-              _el$32 = _el$30.nextSibling;
-              _el$32.nextSibling;
-              var _el$33 = _el$29.nextSibling;
-            insert(_el$29, () => s.user.displayName, _el$30);
-            insert(_el$29, () => s.user.name, _el$32);
-            createRenderEffect(_p$ => {
-              var _v$17 = styles.card,
-                _v$18 = styles.avatar,
-                _v$19 = s.avatar,
-                _v$20 = styles.info,
-                _v$21 = styles.name,
-                _v$22 = styles.notFound;
-              _v$17 !== _p$.e && className(_el$26, _p$.e = _v$17);
-              _v$18 !== _p$.t && className(_el$27, _p$.t = _v$18);
-              _v$19 !== _p$.a && setAttribute(_el$27, "src", _p$.a = _v$19);
-              _v$20 !== _p$.o && className(_el$28, _p$.o = _v$20);
-              _v$21 !== _p$.i && className(_el$29, _p$.i = _v$21);
-              _v$22 !== _p$.n && className(_el$33, _p$.n = _v$22);
-              return _p$;
-            }, {
-              e: undefined,
-              t: undefined,
-              a: undefined,
-              o: undefined,
-              i: undefined,
-              n: undefined
-            });
-            return _el$26;
-          })();
-        })();
-      }
-    }), null);
-    createRenderEffect(_p$ => {
-      var _v$ = styles.root,
-        _v$2 = styles.header,
-        _v$3 = styles.form,
-        _v$4 = styles.input,
-        _v$5 = busy(),
-        _v$6 = styles.button,
-        _v$7 = busy(),
-        _v$8 = styles.result;
-      _v$ !== _p$.e && className(_el$, _p$.e = _v$);
-      _v$2 !== _p$.t && className(_el$2, _p$.t = _v$2);
-      _v$3 !== _p$.a && className(_el$3, _p$.a = _v$3);
-      _v$4 !== _p$.o && className(_el$4, _p$.o = _v$4);
-      _v$5 !== _p$.i && (_el$4.disabled = _p$.i = _v$5);
-      _v$6 !== _p$.n && className(_el$5, _p$.n = _v$6);
-      _v$7 !== _p$.s && (_el$5.disabled = _p$.s = _v$7);
-      _v$8 !== _p$.h && className(_el$6, _p$.h = _v$8);
-      return _p$;
-    }, {
-      e: undefined,
-      t: undefined,
-      a: undefined,
-      o: undefined,
-      i: undefined,
-      n: undefined,
-      s: undefined,
-      h: undefined
-    });
-    createRenderEffect(() => _el$4.value = username());
-    return _el$;
-  })();
-}
-
-// Inject CSS
-GM_addStyle(css_248z);
-const panel = ui.getPanel({
-  theme: 'dark',
-  style: stylesheet
-});
-Object.assign(panel.wrapper.style, {
-  top: '80px',
-  right: '20px',
-  zIndex: '99999'
-});
-panel.setMovable(true);
-
-// A small launcher button to toggle the panel.
-const launcher = document.createElement('button');
-launcher.textContent = 'rogrep';
-Object.assign(launcher.style, {
-  position: 'fixed',
-  bottom: '20px',
-  right: '20px',
-  zIndex: '99999',
-  padding: '10px 16px',
-  borderRadius: '9999px',
-  border: 'none',
-  background: '#335fff',
-  color: '#fff',
-  fontWeight: '600',
-  cursor: 'pointer',
-  boxShadow: '0 4px 12px rgba(0,0,0,0.3)'
-});
-let visible = false;
-const toggle = () => {
-  visible = !visible;
-  if (visible) panel.show();else panel.hide();
-};
-launcher.addEventListener('click', toggle);
-document.body.appendChild(launcher);
-render(Rogrep, panel.body);
-delegateEvents(["input"]);
-
-})(VM);
+`;var xr=Vi({theme:"dark",style:Gi});Object.assign(xr.wrapper.style,{top:"80px",right:"20px",zIndex:"99999"});xr.setMovable(!0);var rn=document.createElement("button");rn.textContent="rogrep";Object.assign(rn.style,{position:"fixed",bottom:"20px",right:"20px",zIndex:"99999",padding:"10px 16px",borderRadius:"9999px",border:"none",background:"#335fff",color:"#fff",fontWeight:"600",cursor:"pointer",boxShadow:"0 4px 12px rgba(0,0,0,0.3)"});var lo=!1,sa=()=>{if(lo=!lo,lo)xr.show();else xr.hide()};rn.addEventListener("click",sa);document.body.appendChild(rn);er(fo,{target:xr.body});})();
